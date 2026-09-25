@@ -15,7 +15,6 @@ export async function GET() {
     )
 
     const prestocksCount = tokens.filter(t => t.source === 'PreStocks').length
-    const tesseraCount = tokens.filter(t => t.source === 'Tessera').length
 
     return NextResponse.json({
       success: true,
@@ -23,7 +22,6 @@ export async function GET() {
       summary: {
         totalTokens: tokens.length,
         prestocksCount,
-        tesseraCount,
         totalTrackedValuation: totalValuation,
         valuationDisplay: `$${(totalValuation / 1e9).toFixed(1)}B`,
       },

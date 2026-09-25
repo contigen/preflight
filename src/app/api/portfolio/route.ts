@@ -34,9 +34,7 @@ export async function GET(req: NextRequest) {
   let totalInvested = 0
 
   const positions = Object.values(portfolio).map(pos => {
-    const current = tokens.find(
-      t => t.symbol === pos.symbol || t.symbol === pos.symbol.replace('T-', ''),
-    )
+    const current = tokens.find(t => t.symbol === pos.symbol)
     const currentPrice = current?.tokenPrice || pos.avgPrice
     const currentValue = pos.qty * currentPrice
     const pnl = currentValue - pos.totalInvested
