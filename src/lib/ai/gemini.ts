@@ -481,7 +481,7 @@ export async function generatePortfolioDigest(
     totalInvested > 0 ? ((totalPnl / totalInvested) * 100).toFixed(1) : '0.0'
 
   const body = `
-📊 Preflight Portfolio Digest
+Preflight Portfolio Digest
 
 Holdings:
 ${lines.join('\n')}

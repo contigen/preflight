@@ -23,8 +23,8 @@ export async function sendDealMemoStep(
 
   const subject =
     token.changeType === 'NEW_LISTING'
-      ? `🆕 New Pre-IPO Listing: ${token.name} (${token.symbol})`
-      : `📈 ${token.symbol} Pre-IPO Price Moved ${token.changePct}%`
+      ? `New Pre-IPO Listing: ${token.name} (${token.symbol})`
+      : `${token.symbol} Pre-IPO Price Moved ${token.changePct}%`
 
   db.setLastAlertedToken(subscriber.email, token.symbol)
 
@@ -100,7 +100,7 @@ export async function checkAndExpireQuoteStep(
 
     await sendEmail('agent', {
       to: userEmail,
-      subject: `Quote Expired: ${symbol} ⏱️`,
+      subject: `Quote Expired: ${symbol}`,
       text: `Your 15-minute locked quote for ${symbol} has expired.\n\nReply BUY <amount> anytime to receive a fresh execution quote.\n\n— Preflight`,
     })
 
@@ -125,8 +125,8 @@ export async function executeSettlementStep(
 
   const res = await sendEmail('agent', {
     to: userEmail,
-    subject: `✅ Trade Executed: ${token.symbol} on Solana Devnet`,
-    text: `Your purchase has settled on Solana! 🚀
+    subject: `Trade Executed: ${token.symbol} on Solana Devnet`,
+    text: `Your purchase has settled on Solana.
 
 Token:       ${token.name} (${token.symbol})
 Amount Paid: $${amountUsd.toFixed(2)} USDC
@@ -138,7 +138,7 @@ Explorer:    https://explorer.solana.com/tx/${swapResult.txHash}?cluster=devnet
 
 Your portfolio is updated. Reply PORTFOLIO anytime to review positions.
 
-— Preflight 🛫`,
+— Preflight`,
   })
 
   return { txHash: swapResult.txHash, messageId: res.messageId }

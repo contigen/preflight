@@ -270,7 +270,7 @@ export function buildRedemptionAlert(
     stablecoin: "USDC (at Tessera's discretion)",
     transferFeeOnSell:
       '0.2% (Token-2022 applies if sold on DEX instead of redeemed)',
-    warning: `⚠️ CRITICAL: Must redeem by ${deadline.toDateString()}. Unclaimed proceeds are permanently forfeited.`,
+    warning: `CRITICAL: Must redeem by ${deadline.toDateString()}. Unclaimed proceeds are permanently forfeited.`,
     howToRedeem:
       'Visit tessera.pe → Redemption tab → Connect Solana wallet → Claim USDC proceeds',
     taxNote: 'Redemption is a taxable capital event. Consult your tax advisor.',

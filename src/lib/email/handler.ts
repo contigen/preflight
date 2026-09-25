@@ -79,8 +79,8 @@ export async function handleSubscribe(
 
   await sendEmail('subscribe', {
     to: from,
-    subject: "✅ You're In — Preflight Pre-IPO Dealflow",
-    text: `${greeting}! Welcome to Preflight. 🛫
+    subject: "You're In: Preflight Pre-IPO Dealflow",
+    text: `${greeting}! Welcome to Preflight.
 
 We've configured your deal stream:
 • Sectors: ${sectorList}
@@ -101,7 +101,7 @@ When an alert lands in your inbox, simply reply:
 Reply PORTFOLIO anytime for holdings.
 Reply UNSUBSCRIBE to opt out.
 
-— Preflight Broker 🤖`,
+— Preflight Broker`,
   })
 }
 
@@ -160,7 +160,7 @@ export async function handleAgentReply(
     case 'PASS':
       await sendEmail('agent', {
         to: from,
-        subject: 'Opportunity Skipped 👍',
+        subject: 'Opportunity Skipped',
         text: `Understood! Passed on this deal. We'll alert you on the next high-conviction move.\n\n— Preflight`,
         threadId,
       })
@@ -200,7 +200,7 @@ export async function handleAgentReply(
       ) {
         await sendEmail('agent', {
           to: from,
-          subject: 'Preflight Command Guide 🤔',
+          subject: 'Preflight Command Guide',
           text: `I couldn't quite determine your request. Here are the valid commands:
 
 • BUY $200 — allocate $200 to this deal
@@ -252,7 +252,7 @@ async function handleBuyIntent(
 
     await sendEmail('agent', {
       to: from,
-      subject: 'Select Asset to Buy 🎯',
+      subject: 'Select Asset to Buy',
       text: `Which pre-IPO asset would you like to purchase?\n\nPlease specify the asset symbol in your reply, for example:\n  "BUY $100 ANTHROPIC"\n  "BUY $250 SPACEX"\n\nAvailable Assets:\n• ${symbolList}\n\n— Preflight`,
       threadId,
     })
@@ -270,7 +270,7 @@ async function handleBuyIntent(
   } else if (!amountUsd && !tokenQty) {
     await sendEmail('agent', {
       to: from,
-      subject: `Specify Amount for ${token.name} 💰`,
+      subject: `Specify Amount for ${token.name}`,
       text: `How much would you like to invest in ${token.name} (${token.symbol})?
 
 Current Price: $${pricePerToken.toFixed(2)}
@@ -288,7 +288,7 @@ Examples:
   if (subscriber && amountUsd! > subscriber.maxUsd) {
     await sendEmail('agent', {
       to: from,
-      subject: `Over Your $${subscriber.maxUsd} Risk Limit ⚠️`,
+      subject: `Order Exceeds Risk Limit ($${subscriber.maxUsd})`,
       text: `Your max deal size is set to $${subscriber.maxUsd}, but this order would be $${amountUsd!.toFixed(2)}.
 
 Reply "BUY $${subscriber.maxUsd}" to invest up to your limit, or "PASS" to cancel.
@@ -445,7 +445,7 @@ async function handleSellIntent(
 
   await sendEmail('agent', {
     to: from,
-    subject: `Confirm SELL Order: ${targetSymbol} 📉`,
+    subject: `Confirm Trade Order: Sell ${targetSymbol} 🔐`,
     text: `Sell Order Summary:
 
 Action:       SELL
@@ -489,8 +489,8 @@ async function handleConfirm(from: string, threadId?: string) {
   if (intent.type === 'BUY') {
     await sendEmail('agent', {
       to: from,
-      subject: `✅ Trade Executed: ${intent.token.symbol} on Solana Devnet`,
-      text: `Your purchase has settled on Solana! 🚀
+      subject: `Trade Executed: ${intent.token.symbol} on Solana Devnet`,
+      text: `Your purchase has settled on Solana.
 
 Token:       ${intent.token.name} (${intent.token.symbol})
 Amount Paid: $${intent.amountUsd.toFixed(2)} USDC
@@ -502,13 +502,13 @@ Explorer:    https://explorer.solana.com/tx/${swapResult.txHash}?cluster=devnet
 
 Your portfolio is updated. Reply PORTFOLIO anytime to review positions.
 
-— Preflight 🛫`,
+— Preflight`,
       threadId,
     })
   } else {
     await sendEmail('agent', {
       to: from,
-      subject: `✅ Liquidation Executed: Sold ${intent.token.symbol}`,
+      subject: `Liquidation Executed: Sold ${intent.token.symbol}`,
       text: `Your sell order has settled on Solana Devnet!
 
 Asset:       ${intent.token.symbol}
@@ -519,7 +519,7 @@ Explorer:    https://explorer.solana.com/tx/${swapResult.txHash}?cluster=devnet
 
 Reply PORTFOLIO to view remaining holdings.
 
-— Preflight 🛫`,
+— Preflight`,
       threadId,
     })
   }
@@ -532,7 +532,7 @@ async function handlePortfolioRequest(from: string, threadId?: string) {
   if (holdings.length === 0) {
     await sendEmail('agent', {
       to: from,
-      subject: 'Preflight Portfolio Empty 📭',
+      subject: 'Preflight Portfolio Empty',
       text: `You have no open pre-IPO positions.\n\nWhen a deal memo arrives, reply BUY <amount> to open your first allocation.\n\n— Preflight`,
       threadId,
     })
@@ -549,7 +549,7 @@ async function handlePortfolioRequest(from: string, threadId?: string) {
 
   await sendEmail('agent', {
     to: from,
-    subject: '📊 Preflight Portfolio Digest',
+    subject: 'Preflight Portfolio Digest',
     text: digest.body,
     threadId,
   })
@@ -575,7 +575,7 @@ async function handleMarketList(from: string, threadId?: string) {
       `• ${t.name} (${t.symbol}): $${t.tokenPrice.toFixed(2)} | Implied Val: $${t.markValuation ? (t.markValuation / 1e9).toFixed(1) + 'B' : 'N/A'} | 0.20% Fee | Chainlink PoR`,
   )
 
-  const text = `Preflight Live Market Catalog 🛫
+  const text = `Preflight Live Market Catalog
 
 PreStocks (SPV-backed 1:1 exposure on Solana):
 ${prestocksLines.join('\n')}
@@ -592,7 +592,7 @@ Reply PORTFOLIO anytime to review holdings.
 
   await sendEmail('agent', {
     to: from,
-    subject: '📈 Available Pre-IPO Stocks & Tokens',
+    subject: 'Available Pre-IPO Stocks & Tokens',
     text,
     threadId,
   })
@@ -606,7 +606,7 @@ async function handleRedeemInfo(from: string, body: string, threadId?: string) {
 
   await sendEmail('agent', {
     to: from,
-    subject: 'Tessera Redemption Architecture 🏛️',
+    subject: 'Tessera Redemption Architecture',
     text: `Tessera T-Token Redemption Lifecycle:
 
 1. TRIGGER:
@@ -617,7 +617,7 @@ async function handleRedeemInfo(from: string, body: string, threadId?: string) {
 
 3. REDEMPTION WINDOW (CRITICAL):
    Tessera announces a formal Redemption Start Date with a fixed window (typically 30 days).
-   ⚠️ FORFEITURE WARNING: Missing the deadline results in permanent loss of proceeds.
+   FORFEITURE WARNING: Missing the deadline results in permanent loss of proceeds.
 
 4. SECONDARY LIQUIDITY:
    You do not need to wait for an IPO. T-Tokens are continuously tradeable on Jupiter and Meteora DEXs with a 0.20% Token-2022 transfer fee.
@@ -642,15 +642,15 @@ async function handleAuctionInfo(
 
   await sendEmail('agent', {
     to: from,
-    subject: 'Meteora Alpha Vault Pro-Rata Auction Mechanics 🏛️',
+    subject: 'Meteora Alpha Vault Pro-Rata Auction Mechanics',
     text: `Tessera Primary Issuance Mechanics:
 
 ${auction?.phases?.map((p, i) => `Phase ${i + 1}: ${p.name}\n  ${p.desc}`).join('\n\n') || `Phase 1: Deposit Period (USDC deposit)\nPhase 2: Uniform Price Acquisition\nPhase 3: Vesting / Claiming`}
 
 Key Advantages:
-✅ Anti-Sniper: Bot speed confers zero advantage.
-✅ Uniform Pricing: All depositors enter at the exact same valuation.
-✅ Pro-Rata Allocation: Oversubscribed rounds provide proportional refunds.
+• Anti-Sniper: Bot speed confers zero advantage.
+• Uniform Pricing: All depositors enter at the exact same valuation.
+• Pro-Rata Allocation: Oversubscribed rounds provide proportional refunds.
 
 — Preflight Dealflow`,
     threadId,
@@ -667,8 +667,8 @@ export async function sendDealAlert(
   } catch {
     const subject =
       token.changeType === 'NEW_LISTING'
-        ? `🆕 New Pre-IPO Listing: ${token.name} (${token.symbol})`
-        : `📈 ${token.symbol} Pre-IPO Price Moved ${token.changePct}%`
+        ? `New Pre-IPO Listing: ${token.name} (${token.symbol})`
+        : `${token.symbol} Pre-IPO Price Moved ${token.changePct}%`
 
     db.setLastAlertedToken(subscriber.email, token.symbol)
 
@@ -712,7 +712,7 @@ export async function sendRedemptionAlert(
 
     await sendEmail('agent', {
       to: sub.email,
-      subject: `🚨 CRITICAL: ${symbol} ${eventType} — Redeem by ${alert.deadline}`,
+      subject: `CRITICAL: ${symbol} ${eventType} — Redeem by ${alert.deadline}`,
       text: `ACTION REQUIRED: ${symbol} Liquidity Event
 
 ${alert.warning}
@@ -743,7 +743,7 @@ export async function sendAuctionAlert(symbol: string, auctionData: unknown) {
   for (const sub of subscribers) {
     await sendEmail('agent', {
       to: sub.email,
-      subject: `🏛️ Meteora Alpha Vault LIVE: ${symbol} (Pro-Rata Anti-Sniper)`,
+      subject: `Meteora Alpha Vault LIVE: ${symbol} (Pro-Rata Anti-Sniper)`,
       text: `A new primary allocation for ${symbol} is open on Tessera.\n\nAll depositors receive uniform pricing. Deposit USDC on tessera.pe/auction.\n\n— Preflight`,
     })
   }
