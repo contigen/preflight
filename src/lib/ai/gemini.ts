@@ -8,7 +8,6 @@ import type {
   PortfolioPosition,
 } from '@/types'
 import { getTesseraEnrichedToken, buildTesseraContext } from '../tokens/tessera'
-import { formatComparablesForMemo } from '../pyth/comparables'
 
 const PreferenceSchema = z.object({
   sectors: z
@@ -380,8 +379,6 @@ PRESTOCKS TOKEN DETAILS:
 - Solana Contract: ${token.contractAddress || 'prestocks.com'}`
       : ''
 
-  const publicComps = formatComparablesForMemo(token.sector)
-
   const prompt = `
 You are Preflight, an institutional-grade autonomous dealflow broker on Solana.
 Write a concise, high-conviction deal alert memo (under 200 words).
@@ -396,8 +393,6 @@ Asset details:
 - Movement: ${token.changeType === 'NEW_LISTING' ? 'New Primary Listing' : `Price Moved ${token.changePct}%`}
 ${prestocksContext}
 ${tesseraContext}
-
-${publicComps}
 
 Investor Profile:
 - Name: ${subscriber.name || 'Investor'}

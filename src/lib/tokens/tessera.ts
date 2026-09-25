@@ -74,23 +74,49 @@ export async function fetchTesseraTokens(): Promise<Token[]> {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 6000)
 
-    const res = await fetch(`${TESSERA.API_BASE}/token-details`, {
-      headers: { Accept: 'application/json' },
-      signal: controller.signal,
-    })
+    const [detailsRes, tokensRes] = await Promise.all([
+      fetch(`${TESSERA.API_BASE}/token-details`, {
+        headers: { Accept: 'application/json' },
+        signal: controller.signal,
+      }),
+      fetch(`${TESSERA.API_BASE}/tokens`, {
+        headers: { Accept: 'application/json' },
+        signal: controller.signal,
+      }).catch(() => null),
+    ])
     clearTimeout(timeoutId)
 
-    if (!res.ok) {
-      throw new Error(`Tessera HTTP ${res.status}`)
+    if (!detailsRes.ok) {
+      throw new Error(`Tessera HTTP ${detailsRes.status}`)
     }
 
-    const data = (await res.json()) as RawTesseraToken[]
+    const data = (await detailsRes.json()) as RawTesseraToken[]
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error('Empty Tessera response')
     }
 
+    let tokensMeta: Array<{
+      token: string
+      latest_supply: string
+      symbol: string
+    }> = []
+    if (tokensRes && tokensRes.ok) {
+      try {
+        tokensMeta = (await tokensRes.json()) || []
+      } catch {}
+    }
+
     return data.map(t => {
       const config = TESSERA.MINTS[t.symbol] || {}
+      const meta = tokensMeta.find(
+        m =>
+          m.symbol.toLowerCase() === t.symbol.toLowerCase().replace('t-', '') ||
+          m.token === t.mint,
+      )
+      const supply = meta?.latest_supply
+        ? parseFloat(meta.latest_supply)
+        : undefined
+
       return {
         source: 'Tessera',
         name: t.name,
@@ -104,6 +130,7 @@ export async function fetchTesseraTokens(): Promise<Token[]> {
         markValuation: t.markValuation ? Number(t.markValuation) : undefined,
         impliedValuation: t.markValuation ? Number(t.markValuation) : undefined,
         holders: t.holders ? Number(t.holders) : undefined,
+        supply,
         transferFeePct: 0.2,
         standard: 'Token-2022',
         legalStructure: 'Loan participation right (not a security)',
@@ -117,7 +144,8 @@ export async function fetchTesseraTokens(): Promise<Token[]> {
       }
     })
   } catch {
-    return TESSERA_SEED
+    const { db } = await import('@/lib/db/store')
+    return db.getSnapshot().filter(t => t.source === 'Tessera')
   }
 }
 
@@ -327,81 +355,3 @@ TESSERA TOKEN SPECIFICATION:
 • Solscan: ${enriched.solscan || 'solscan.io'}
   `.trim()
 }
-
-export const TESSERA_SEED: Token[] = [
-  {
-    source: 'Tessera',
-    name: 'T-OpenAI',
-    symbol: 'T-OpenAI',
-    code: 'tOpenAI',
-    sector: 'AI',
-    mint: 'oPAiAikWTaFj9RYoRFD35ccfwhnMcB3ThgBZRHSkjTZ',
-    contractAddress: 'oPAiAikWTaFj9RYoRFD35ccfwhnMcB3ThgBZRHSkjTZ',
-    tokenPrice: 812.79,
-    markPrice: 812.79,
-    markValuation: 950_000_000_000,
-    impliedValuation: 950_000_000_000,
-    holders: 8259,
-    transferFeePct: 0.2,
-    standard: 'Token-2022',
-    legalStructure: 'Loan participation right (not a security)',
-    url: 'https://tessera.pe',
-    solscan:
-      'https://solscan.io/token/oPAiAikWTaFj9RYoRFD35ccfwhnMcB3ThgBZRHSkjTZ',
-    feeBps: 20,
-    decimals: 9,
-    porFeed: 'topenai--nav-streams',
-    description:
-      'Tessera T-Token providing economic exposure to OpenAI equity value via Cayman SPC',
-  },
-  {
-    source: 'Tessera',
-    name: 'T-Kalshi',
-    symbol: 'T-Kalshi',
-    code: 'tKalshi',
-    sector: 'Prediction Markets',
-    mint: 'TKLSidmLVt3cqGaaodG8tyRzoANfQwoh67AccjmubeZ',
-    contractAddress: 'TKLSidmLVt3cqGaaodG8tyRzoANfQwoh67AccjmubeZ',
-    tokenPrice: 413.8,
-    markPrice: 413.8,
-    markValuation: 14_000_000_000,
-    impliedValuation: 14_000_000_000,
-    holders: 2605,
-    transferFeePct: 0.2,
-    standard: 'Token-2022',
-    legalStructure: 'Loan participation right (not a security)',
-    url: 'https://tessera.pe',
-    solscan:
-      'https://solscan.io/token/TKLSidmLVt3cqGaaodG8tyRzoANfQwoh67AccjmubeZ',
-    feeBps: 20,
-    decimals: 9,
-    porFeed: 'tkalshi-usd-smartdata-datalink',
-    description:
-      'Tessera T-Token providing economic exposure to Kalshi equity value',
-  },
-  {
-    source: 'Tessera',
-    name: 'T-SpaceX',
-    symbol: 'T-SpaceX',
-    code: 'tSpaceX',
-    sector: 'Space',
-    mint: 'TSPXcLV76s6V2zDiZQ18kBfcbnjaE2ZzNT3ga2Pd99v',
-    contractAddress: 'TSPXcLV76s6V2zDiZQ18kBfcbnjaE2ZzNT3ga2Pd99v',
-    tokenPrice: 423.0,
-    markPrice: 423.0,
-    markValuation: 800_000_000_000,
-    impliedValuation: 800_000_000_000,
-    holders: 1274,
-    transferFeePct: 0.2,
-    standard: 'Token-2022',
-    legalStructure: 'Loan participation right (not a security)',
-    url: 'https://tessera.pe',
-    solscan:
-      'https://solscan.io/token/TSPXcLV76s6V2zDiZQ18kBfcbnjaE2ZzNT3ga2Pd99v',
-    feeBps: 20,
-    decimals: 9,
-    porFeed: 'tspacex-usd-smartdata-datalink',
-    description:
-      'Tessera T-Token providing economic exposure to SpaceX equity value',
-  },
-]
