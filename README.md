@@ -96,7 +96,7 @@ You can send any of the following instructions in reply to a deal alert or direc
 - **Interface**: React 19.2.8, Tailwind CSS v4, Lucide Icons
 - **AI & Intent Extraction**: Google Gemini 3.6 Flash via Vercel AI SDK (`ai`, `@ai-sdk/google`)
 - **Durable Workflows**: Workflow SDK (`workflow@4.8.9`, `workflow-sdk.dev`) for step-based orchestration, 15-minute quote timers (`sleep('15m')`), and quote expiration
-- **Email Infrastructure**: AgentMail (`agentmail` SDK) with Svix webhook verification
+- **Email Infrastructure**: AgentMail (`agentmail` SDK) with webhook
 - **Persistence**: Upstash Redis (idempotent webhook registry, subscriber profiles, trade intents, user portfolios)
 - **Blockchain**: `@solana/web3.js` for Devnet transactions and mainnet Token-2022 supply inspection
 
