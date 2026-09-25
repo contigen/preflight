@@ -282,7 +282,7 @@ export function PreflightView({
     <div className='relative min-h-screen w-full bg-[#fafafa] text-zinc-900 flex flex-col justify-between'>
       <header className='sticky top-0 z-30 w-full bg-white/85 backdrop-blur-md border-b border-zinc-100'>
         <div className='mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6'>
-          <div className='flex items-center gap-2 sm:gap-3'>
+          <div className='flex items-center gap-2.5'>
             <button
               type='button'
               onClick={() => setActiveTab('DEAL')}
@@ -292,26 +292,10 @@ export function PreflightView({
                 Preflight
               </span>
             </button>
-            <span className='rounded-full bg-zinc-100 px-2.5 py-0.5 font-pixel text-[10px] text-zinc-500 border border-zinc-200'>
-              Solana Devnet
+            <span className='inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-0.5 font-pixel text-[11px] text-zinc-600 border border-zinc-200'>
+              <span className='h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse' />
+              <span>Solana Devnet</span>
             </span>
-            <a
-              href={`mailto:${PREFLIGHT_AGENT_EMAIL}`}
-              className='hidden lg:flex items-center gap-1.5 rounded-full bg-blue-50 hover:bg-blue-100 border border-blue-200/90 px-2.5 py-0.5 font-pixel text-[11px] text-blue-700 transition'
-              title='Preflight Autonomous Broker Email Interface'
-            >
-              <div className='rounded-full overflow-hidden shrink-0 border border-blue-200'>
-                <Facehash
-                  name={PREFLIGHT_AGENT_EMAIL}
-                  size={14}
-                  interactive={false}
-                  showInitial={false}
-                />
-              </div>
-              <span className='font-mono text-[10px]'>
-                {PREFLIGHT_AGENT_EMAIL}
-              </span>
-            </a>
           </div>
 
           <div className='hidden md:flex items-center rounded-full bg-zinc-100 p-1 text-xs font-pixel'>
@@ -320,7 +304,7 @@ export function PreflightView({
               onClick={() => setActiveTab('DEAL')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'DEAL'
-                  ? 'bg-white text-black  shadow-xs'
+                  ? 'bg-white text-black shadow-xs font-bold'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -333,7 +317,7 @@ export function PreflightView({
               onClick={() => setActiveTab('MARKETS')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'MARKETS'
-                  ? 'bg-white text-black  shadow-xs'
+                  ? 'bg-white text-black shadow-xs font-bold'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -346,7 +330,7 @@ export function PreflightView({
               onClick={() => setActiveTab('ACTIVITY')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'ACTIVITY'
-                  ? 'bg-white text-black  shadow-xs'
+                  ? 'bg-white text-black shadow-xs font-bold'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -359,61 +343,60 @@ export function PreflightView({
               onClick={() => setActiveTab('GUIDE')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'GUIDE'
-                  ? 'bg-white text-black  shadow-xs'
+                  ? 'bg-white text-black shadow-xs font-bold'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
               <BookOpen className='h-3.5 w-3.5' />
               <span>How It Works</span>
             </button>
-
-            <button
-              type='button'
-              onClick={() => setIsOnboardingOpen(true)}
-              className='flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-blue-600 hover:text-blue-800 transition '
-            >
-              <Compass className='h-3.5 w-3.5' />
-              <span>Directive</span>
-            </button>
           </div>
 
           <div className='flex items-center gap-2'>
-            {userEmail && (
-              <button
-                type='button'
-                onClick={() => setIsOnboardingOpen(true)}
-                className='hidden xl:flex items-center gap-1.5 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200/80 px-2.5 py-1 font-pixel text-xs text-zinc-700 transition'
-                title='Your Dedicated Solana Wallet & Onboarding Directive'
-              >
-                <div className='rounded-full overflow-hidden shrink-0 border border-zinc-200'>
-                  <Facehash
-                    name={userWallet?.publicKey || userEmail}
-                    size={14}
-                    interactive={false}
-                    showInitial={false}
-                  />
-                </div>
-                <span>Wallet:</span>
-                <span className='font-mono text-[10px]'>
-                  {userWallet
-                    ? `${userWallet.publicKey.slice(0, 4)}...${userWallet.publicKey.slice(-4)}`
-                    : '...'}
-                </span>
-                <span
-                  className={`ml-0.5 px-1.5 py-0.2 rounded-full text-[9px]  ${
-                    userWallet?.isFunded
-                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                      : 'bg-amber-100 text-amber-800 border border-amber-200'
-                  }`}
+            {userEmail ? (
+              <div className='flex items-center gap-1.5'>
+                <button
+                  type='button'
+                  onClick={() => {
+                    setTempEmailInput(userEmail)
+                    setIsEmailModalOpen(true)
+                  }}
+                  className='flex items-center gap-2 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200/80 px-2.5 py-1 font-pixel text-xs text-zinc-700 transition'
+                  title='Manage Session & Dedicated Wallet'
                 >
-                  {userWallet?.balanceSol
-                    ? `${userWallet.balanceSol.toFixed(2)} SOL`
-                    : '0 SOL'}
-                </span>
-              </button>
-            )}
-
-            {!userEmail ? (
+                  <div className='rounded-full overflow-hidden shrink-0 border border-zinc-200'>
+                    <Facehash
+                      name={userEmail}
+                      size={14}
+                      interactive={false}
+                      showInitial={false}
+                    />
+                  </div>
+                  <span className='max-w-[100px] sm:max-w-[130px] truncate'>
+                    {userEmail}
+                  </span>
+                  <span
+                    className={`px-1.5 py-0.2 rounded-full text-[9px] font-bold ${
+                      userWallet?.isFunded
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-amber-100 text-amber-800'
+                    }`}
+                  >
+                    {userWallet?.balanceSol
+                      ? `${userWallet.balanceSol.toFixed(2)} SOL`
+                      : '0 SOL'}
+                  </span>
+                </button>
+                <button
+                  type='button'
+                  onClick={handleDisconnect}
+                  className='p-1.5 rounded-full text-zinc-400 hover:text-rose-600 hover:bg-zinc-100 transition'
+                  title='Disconnect Email'
+                >
+                  <LogOut className='h-3 w-3' />
+                </button>
+              </div>
+            ) : (
               <button
                 type='button'
                 onClick={() => {
@@ -425,38 +408,6 @@ export function PreflightView({
                 <User className='h-3.5 w-3.5 text-zinc-300' />
                 <span>Connect Email</span>
               </button>
-            ) : (
-              <div className='flex items-center gap-1.5'>
-                <button
-                  type='button'
-                  onClick={() => {
-                    setTempEmailInput(userEmail)
-                    setIsEmailModalOpen(true)
-                  }}
-                  className='flex items-center gap-1.5 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200/80 px-2.5 py-1 font-pixel text-xs text-zinc-700 transition'
-                >
-                  <div className='rounded-full overflow-hidden shrink-0 border border-zinc-200'>
-                    <Facehash
-                      name={userEmail}
-                      size={14}
-                      interactive={false}
-                      showInitial={false}
-                    />
-                  </div>
-                  <span className='max-w-[100px] sm:max-w-[150px] truncate'>
-                    {userEmail}
-                  </span>
-                  <ChevronDown className='h-3 w-3 text-zinc-400' />
-                </button>
-                <button
-                  type='button'
-                  onClick={handleDisconnect}
-                  className='p-1.5 rounded-full text-zinc-400 hover:text-rose-600 hover:bg-zinc-100 transition'
-                  title='Disconnect Email'
-                >
-                  <LogOut className='h-3 w-3' />
-                </button>
-              </div>
             )}
 
             <button
@@ -474,35 +425,35 @@ export function PreflightView({
           <button
             type='button'
             onClick={() => setActiveTab('DEAL')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'DEAL' ? 'bg-black text-white ' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'DEAL' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
           >
             Deal Flow
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('MARKETS')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'MARKETS' ? 'bg-black text-white ' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'MARKETS' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
           >
             Markets
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('ACTIVITY')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'ACTIVITY' ? 'bg-black text-white ' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'ACTIVITY' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
           >
             Holdings
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('GUIDE')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'GUIDE' ? 'bg-black text-white ' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'GUIDE' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
           >
             How It Works
           </button>
           <button
             type='button'
             onClick={() => setIsOnboardingOpen(true)}
-            className='rounded-full px-3 py-1 transition text-blue-600 '
+            className='rounded-full px-3 py-1 transition text-blue-600 font-bold'
           >
             Directive
           </button>
@@ -512,32 +463,6 @@ export function PreflightView({
       <main className='flex-1 w-full flex flex-col items-center justify-start'>
         {activeTab === 'DEAL' && (
           <div className='w-full flex flex-col items-center'>
-            <div className='w-full max-w-lg px-4 pt-4 pb-1'>
-              <div className='flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/90 via-sky-50/40 to-white border border-blue-200/80 shadow-xs'>
-                <div className='flex items-center gap-2.5'>
-                  <div className='h-8 w-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0'>
-                    <Compass className='h-4 w-4' />
-                  </div>
-                  <div>
-                    <div className='font-hand text-xl text-zinc-900 leading-none'>
-                      The Preflight Directive
-                    </div>
-                    <div className='font-pixel text-[11px] text-zinc-500 mt-0.5'>
-                      1. Understand Flow &bull; 2. Fund Wallet &bull; 3. Copy
-                      Agent Mail
-                    </div>
-                  </div>
-                </div>
-                <button
-                  type='button'
-                  onClick={() => setIsOnboardingOpen(true)}
-                  className='rounded-full bg-black hover:bg-zinc-800 text-white px-4 py-1.5 font-hand text-base shadow-xs shrink-0 transition'
-                >
-                  Onboarding &rarr;
-                </button>
-              </div>
-            </div>
-
             <DealCard
               tokens={tokens}
               selectedSymbol={selectedSymbol}
@@ -552,13 +477,22 @@ export function PreflightView({
               onOpenOnboarding={() => setIsOnboardingOpen(true)}
             />
 
-            <div className='w-full max-w-md px-4 mt-2 mb-8 text-center'>
+            <div className='w-full max-w-md px-4 pb-8 flex items-center justify-center gap-4 text-center'>
+              <button
+                type='button'
+                onClick={() => setIsOnboardingOpen(true)}
+                className='inline-flex items-center gap-1.5 font-pixel text-xs text-blue-600 hover:text-blue-800 transition'
+              >
+                <Compass className='h-3.5 w-3.5' />
+                <span>Onboarding Directive</span>
+              </button>
+              <span className='text-zinc-300'>&bull;</span>
               <button
                 type='button'
                 onClick={() => setActiveTab('GUIDE')}
-                className='font-hand text-base text-zinc-500 hover:text-black underline underline-offset-4'
+                className='font-pixel text-xs text-zinc-500 hover:text-black transition'
               >
-                New to pre-IPO tokens? Read how Preflight works &rarr;
+                How Preflight Works &rarr;
               </button>
             </div>
           </div>
