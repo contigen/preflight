@@ -1,0 +1,9 @@
+node_modules
+.next
+.workflow
+dist
+build
+coverage
+*.log
+bun.lock
+package-lock.json

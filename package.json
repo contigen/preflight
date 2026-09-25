@@ -6,12 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write ."
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.78",
+    "@solana/web3.js": "^1.99.0",
+    "@upstash/redis": "^1.39.0",
+    "@x402/fetch": "^2.27.0",
+    "agentmail": "^0.5.27",
+    "ai": "^7.0.112",
+    "bs58": "^6.0.0",
+    "dotenv": "^18.0.3",
+    "facehash": "^0.1.0",
+    "geist": "^1.7.2",
+    "lucide-react": "^1.47.0",
     "next": "16.3.5",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "sileo": "^0.1.5",
+    "svix": "^2.5.0",
+    "workflow": "^4.8.9",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -21,6 +37,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "prettier": "^3.9.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
