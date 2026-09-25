@@ -7,7 +7,6 @@ import type {
   ParsedReplyIntent,
   PortfolioPosition,
 } from '@/types'
-import { getTesseraEnrichedToken, buildTesseraContext } from '../tokens/tessera'
 
 const PreferenceSchema = z.object({
   sectors: z
@@ -49,7 +48,7 @@ export async function extractPreferences(
         schema: PreferenceSchema,
       }),
       prompt: `
-You are parsing an investor onboarding email for Preflight, an AI dealflow agent for pre-IPO tokens on Solana.
+You are parsing an investor onboarding email for Preflight, an AI dealflow agent for PreStocks pre-IPO tokens on Solana.
 Extract the investor's preferences.
 
 Available sectors: AI, Defense, Space, Prediction Markets, Robotics, Biotech, Fintech, General.
@@ -83,15 +82,13 @@ const ReplyIntentSchema = z.object({
     'PORTFOLIO',
     'MARKET',
     'UNSUBSCRIBE',
-    'REDEEM',
-    'AUCTION',
     'UNCLEAR',
   ]),
   symbol: z
     .string()
     .nullable()
     .describe(
-      'The token symbol if explicitly mentioned (e.g. SPACEX, T-OpenAI, ANTHROPIC)',
+      'The token symbol if explicitly mentioned (e.g. SPACEX, OPENAI, ANTHROPIC)',
     ),
   amountUsd: z.number().nullable().describe('USD dollar amount specified'),
   tokenQty: z.number().nullable().describe('Token unit count specified'),
@@ -197,15 +194,11 @@ function parseIntentFallback(emailBody: string): ParsedReplyIntent {
       'FIGUREAI',
       'NEURALINK',
       'POLYMARKET',
-      'T-OPENAI',
-      'T-KALSHI',
-      'T-SPACEX',
     ]
 
     let detectedSymbol: string | null = null
     for (const sym of knownSymbols) {
-      const clean = sym.toLowerCase().replace('t-', '')
-      if (lower.includes(sym.toLowerCase()) || lower.includes(clean)) {
+      if (lower.includes(sym.toLowerCase())) {
         detectedSymbol = sym
         break
       }
@@ -238,6 +231,7 @@ function parseIntentFallback(emailBody: string): ParsedReplyIntent {
       confidence: 'HIGH',
     }
   }
+
   if (
     lower.includes('portfolio') ||
     lower.includes('holdings') ||
@@ -252,30 +246,7 @@ function parseIntentFallback(emailBody: string): ParsedReplyIntent {
       confidence: 'HIGH',
     }
   }
-  if (lower.includes('redeem') || lower.includes('redemption')) {
-    return {
-      intent: 'REDEEM',
-      symbol: null,
-      amountUsd: null,
-      tokenQty: null,
-      pct: null,
-      confidence: 'HIGH',
-    }
-  }
-  if (
-    lower.includes('auction') ||
-    lower.includes('alpha vault') ||
-    lower.includes('meteora')
-  ) {
-    return {
-      intent: 'AUCTION',
-      symbol: null,
-      amountUsd: null,
-      tokenQty: null,
-      pct: null,
-      confidence: 'HIGH',
-    }
-  }
+
   if (
     lower.includes('unsubscribe') ||
     lower.includes('opt out') ||
@@ -290,6 +261,7 @@ function parseIntentFallback(emailBody: string): ParsedReplyIntent {
       confidence: 'HIGH',
     }
   }
+
   return {
     intent: 'UNCLEAR',
     symbol: null,
@@ -317,7 +289,7 @@ export async function parseReplyIntent(
         schema: ReplyIntentSchema,
       }),
       prompt: `
-Parse a subscriber's reply to a pre-IPO deal alert email from Preflight.
+Parse a subscriber's reply to a PreStocks pre-IPO deal alert email from Preflight.
 
 CRITICAL INSTRUCTIONS:
 1. Focus exclusively on the subscriber's top-level reply.
@@ -333,14 +305,11 @@ Examples:
 - "Invest $150 in Anthropic" -> intent=BUY, symbol="ANTHROPIC", amountUsd=150
 - "BUY 0.5 tokens" -> intent=BUY, tokenQty=0.5
 - "sell half my SPACEX" -> intent=SELL, symbol="SPACEX", pct=50
-- "sell 50% of T-OpenAI" -> intent=SELL, symbol="T-OpenAI", pct=50
 - "sell 2 tokens of ANTHROPIC" -> intent=SELL, symbol="ANTHROPIC", tokenQty=2
 - "sell $100 KALSHI" -> intent=SELL, symbol="KALSHI", amountUsd=100
 - "exit ANTHROPIC" or "liquidate OpenAI" -> intent=SELL, pct=100
 - "show my portfolio", "what are my holdings" -> intent=PORTFOLIO
 - "what stocks are available to purchase?", "what can I buy?", "what tokens are available?", "list stocks", "market", "show deals" -> intent=MARKET
-- "how do I redeem", "redemption window", "IPO payout" -> intent=REDEEM
-- "auction info", "alpha vault", "how does meteora work" -> intent=AUCTION
 - "unsubscribe", "stop" -> intent=UNSUBSCRIBE
 
 Reply message:
@@ -360,39 +329,23 @@ export async function generateDealMemo(
   token: Token,
   subscriber: SubscriberProfile,
 ): Promise<string> {
-  let tesseraContext = ''
-  if (token.source === 'Tessera') {
-    try {
-      const enriched = await getTesseraEnrichedToken(token.symbol)
-      if (enriched) tesseraContext = '\n\n' + buildTesseraContext(enriched)
-    } catch {}
-  }
-
-  const prestocksContext =
-    token.source === 'PreStocks'
-      ? `
-PRESTOCKS TOKEN DETAILS:
-- Legal Structure: SPV-backed pre-IPO token
-- Mark Price: $${token.markPrice?.toFixed(2) || 'N/A'} | Premium to NAV: ${token.premium || '0'}%
-- Transfer Fee: 0% (standard SPL token)
-- Trading on: Jupiter, Meteora
-- Solana Contract: ${token.contractAddress || 'prestocks.com'}`
-      : ''
-
   const prompt = `
-You are Preflight, an institutional-grade autonomous dealflow broker on Solana.
+You are Preflight, an institutional pre-IPO dealflow broker for PreStocks on Solana.
 Write a concise, high-conviction deal alert memo (under 200 words).
 Do NOT include a subject line.
 
 Asset details:
 - Name: ${token.name} (${token.symbol})
-- Source: ${token.source}
+- Source: PreStocks
 - Current Token Price: $${token.tokenPrice.toFixed(2)}
+- Mark Price: $${token.markPrice?.toFixed(2) || 'N/A'}
 - Implied Valuation: $${token.markValuation ? (token.markValuation / 1e9).toFixed(1) + 'B' : 'N/A'}
+- NAV Premium / Discount: ${token.premium || '0'}%
+- Legal Structure: SPV-backed pre-IPO token
+- Transfer Fee: 0% (standard SPL token)
 - Description: ${token.description || 'Leading high-growth pre-IPO company'}
 - Movement: ${token.changeType === 'NEW_LISTING' ? 'New Primary Listing' : `Price Moved ${token.changePct}%`}
-${prestocksContext}
-${tesseraContext}
+- Solana Contract: ${token.contractAddress || 'prestocks.com'}
 
 Investor Profile:
 - Name: ${subscriber.name || 'Investor'}
@@ -401,9 +354,8 @@ Investor Profile:
 
 Rules:
 1. Explain the thesis in 2 punchy sentences.
-2. For Tessera: highlight Chainlink Proof of Reserve (1:1 backing) and the 0.2% Token-2022 transfer fee.
-3. For PreStocks: highlight the NAV premium/discount and SPV liquidity.
-4. Conclude with exactly these two actionable lines:
+2. Highlight the NAV premium/discount and SPV liquidity on Solana.
+3. Conclude with exactly these two actionable lines:
 Reply BUY <amount> — e.g. "BUY $200" or "BUY 0.5"
 Reply PASS to skip this opportunity.
   `.trim()
@@ -416,9 +368,7 @@ Reply PASS to skip this opportunity.
       `Deal Alert: ${token.name} (${token.symbol}) @ $${token.tokenPrice.toFixed(2)}\n` +
       `Implied Valuation: $${token.markValuation ? (token.markValuation / 1e9).toFixed(1) + 'B' : 'N/A'}\n\n` +
       `${token.description || 'High growth pre-IPO asset'}.\n` +
-      (token.source === 'Tessera'
-        ? 'Backed by Chainlink Proof of Reserve (1:1 custody). Built on Token-2022 with 0.2% transfer fee.\n\n'
-        : 'SPV-backed token with zero transfer fee.\n\n') +
+      `SPV-backed PreStocks token with zero transfer fee.\n\n` +
       `Reply BUY <amount> — e.g. "BUY $200" or "BUY 0.5"\nReply PASS to skip this opportunity.`
     )
   }
@@ -454,9 +404,7 @@ export async function generatePortfolioDigest(
   let totalInvested = 0
 
   const lines = entries.map(([symbol, pos]) => {
-    const current = currentTokens.find(
-      t => t.symbol === symbol || t.symbol === symbol.replace('T-', ''),
-    )
+    const current = currentTokens.find(t => t.symbol === symbol)
     const currentPrice = current?.tokenPrice || pos.avgPrice
     const value = pos.qty * currentPrice
     const pnl = value - pos.totalInvested
