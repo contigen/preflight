@@ -15,7 +15,6 @@ export type ActivityEvent = {
     | 'INTENT_CREATED'
     | 'TRADE_EXECUTED'
     | 'TRADE_SOLD'
-    | 'REDEMPTION_ALERT'
   summary: string
   details?: Record<string, unknown>
   txHash?: string
