@@ -9,8 +9,8 @@ Private company equity from Anthropic, SpaceX, OpenAI, and Anduril trades on Sol
 1. **Market ingestion**: Preflight polls PreStocks and Tessera APIs for new primary listings and price movements over 3%.
 2. **Deal memos**: When an asset moves, the agent formats a short memo with current pricing, implied valuation, NAV premium or discount, and public comparables.
 3. **Structured intent parsing**: You reply in natural language (for example, `BUY $100 ANTHROPIC`, `What stocks are available to purchase?`, or `Show my portfolio`). Gemini 3.6 Flash parses your reply against a strict Zod schema.
-4. **Guaranteed quote**: Buy requests generate a 15-minute locked quote that details the asset, token count, price, fee, and estimated slippage.
-5. **On-chain settlement**: Replying `CONFIRM` triggers settlement on Solana Devnet, returns a Solscan explorer link, and records the position in your portfolio. Replying `PASS` voids the order.
+4. **Guaranteed quote via durable workflow**: Buy requests launch an `orderQuoteWorkflow` powered by Workflow SDK (`workflow-sdk.dev`). The workflow delivers a locked quote with execution price, fees, and slippage, then runs a durable `sleep('15m')` timer that cancels and expires unconfirmed quotes without server memory leaks.
+5. **On-chain settlement**: Replying `CONFIRM` triggers `executeTradeWorkflow` on Solana Devnet, returns a Solscan explorer link, and records the position in your portfolio. Replying `PASS` voids the order.
 
 ## Supported assets
 
@@ -77,6 +77,13 @@ You can send any of the following instructions in reply to a deal alert or direc
                                 │
                                 ▼
                     ┌─────────────────────────┐
+                    │ Workflow SDK Engine     │
+                    │ (workflow-sdk.dev)      │
+                    │ 15m Sleep & Auto-Expiry │
+                    └───────────┬─────────────┘
+                                │
+                                ▼
+                    ┌─────────────────────────┐
                     │ Solana Devnet Execution │
                     │ & Upstash Redis Store   │
                     └─────────────────────────┘
@@ -88,6 +95,7 @@ You can send any of the following instructions in reply to a deal alert or direc
 - **Framework**: Next.js 16.3.5 (App Router, Turbopack)
 - **Interface**: React 19.2.8, Tailwind CSS v4, Lucide Icons
 - **AI & Intent Extraction**: Google Gemini 3.6 Flash via Vercel AI SDK (`ai`, `@ai-sdk/google`)
+- **Durable Workflows**: Workflow SDK (`workflow@4.8.9`, `workflow-sdk.dev`) for step-based orchestration, 15-minute quote timers (`sleep('15m')`), and quote expiration
 - **Email Infrastructure**: AgentMail (`agentmail` SDK) with Svix webhook verification
 - **Persistence**: Upstash Redis (idempotent webhook registry, subscriber profiles, trade intents, user portfolios)
 - **Blockchain**: `@solana/web3.js` for Devnet transactions and mainnet Token-2022 supply inspection
