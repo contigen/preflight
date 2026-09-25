@@ -54,11 +54,6 @@ export async function sendQuoteStep(
 ): Promise<{ success: boolean; messageId?: string }> {
   'use step'
 
-  const transferFeeNote =
-    params.token.source === 'Tessera'
-      ? '\nToken-2022 Transfer Fee: 0.20% (standard built-in protocol fee)'
-      : ''
-
   const text = `Order Summary:
 
 Action:     BUY
@@ -66,7 +61,7 @@ Asset:      ${params.token.name} (${params.token.symbol})
 Source:     ${params.token.source}
 Allocation: $${params.amountUsd.toFixed(2)} USD -> ~${params.tokenQty.toFixed(4)} tokens
 Execution:  $${params.pricePerToken.toFixed(2)} per token
-Est. Fee:   ${params.quote.feePct}% ($${params.quote.feeUsd})${transferFeeNote}
+Est. Fee:   ${params.quote.feePct}% ($${params.quote.feeUsd})
 Est. Slip:  ~${params.quote.slippagePct}%
 Network:    Solana Devnet
 
