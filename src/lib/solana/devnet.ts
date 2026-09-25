@@ -67,7 +67,7 @@ export async function executeDevnetTrade(
   amountUsd: number,
   userEmail?: string,
 ): Promise<SwapResult> {
-  const feePct = token.source === 'Tessera' ? 0.2 : 0.1
+  const feePct = 0.1
   const feeUsd = ((amountUsd * feePct) / 100).toFixed(4)
   const slippagePct = (0.15).toFixed(2)
 
@@ -172,7 +172,7 @@ export function calculateTradeQuote(
   token: Token,
   amountUsd: number,
 ): SwapResult {
-  const feePct = token.source === 'Tessera' ? '0.20' : '0.10'
+  const feePct = '0.10'
   const feeUsd = ((amountUsd * parseFloat(feePct)) / 100).toFixed(4)
   const slippagePct = '0.15'
   return {

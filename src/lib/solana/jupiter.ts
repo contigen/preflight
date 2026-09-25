@@ -7,9 +7,6 @@ export const TOKEN_MINTS: Record<string, string> = {
   OPENAI: 'PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF',
   POLYMARKET: 'Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP',
   SPACEX: 'PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh',
-  'T-OpenAI': 'oPAiAikWTaFj9RYoRFD35ccfwhnMcB3ThgBZRHSkjTZ',
-  'T-Kalshi': 'TKLSidmLVt3cqGaaodG8tyRzoANfQwoh67AccjmubeZ',
-  'T-SpaceX': 'TSPXcLV76s6V2zDiZQ18kBfcbnjaE2ZzNT3ga2Pd99v',
 }
 
 export const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
