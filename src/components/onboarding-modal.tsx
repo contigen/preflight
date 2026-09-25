@@ -202,7 +202,7 @@ export function OnboardingModal({
         </button>
 
         <div className='flex items-center gap-2 mb-6'>
-          <span className='rounded-full bg-blue-50 px-2.5 py-0.5 font-pixel text-[11px] text-blue-700 font-bold border border-blue-200'>
+          <span className='rounded-full bg-blue-50 px-2.5 py-0.5 font-pixel text-[11px] text-blue-700  border border-blue-200'>
             Step {step} of 4
           </span>
           <div className='flex gap-1.5'>
@@ -225,7 +225,7 @@ export function OnboardingModal({
               </h2>
               <p className='mt-2 font-pixel text-xs sm:text-sm text-zinc-600 leading-relaxed'>
                 Preflight is the first autonomous pre-IPO broker on Solana where{' '}
-                <span className='font-bold text-zinc-900'>
+                <span className=' text-zinc-900'>
                   email is your trading interface
                 </span>
                 .
@@ -235,10 +235,10 @@ export function OnboardingModal({
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 font-pixel text-xs'>
               <div className='p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col justify-between'>
                 <div>
-                  <div className='h-8 w-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-2 font-bold'>
+                  <div className='h-8 w-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-2 '>
                     01
                   </div>
-                  <h4 className='font-bold text-zinc-900'>Zero Phantom</h4>
+                  <h4 className=' text-zinc-900'>Zero Phantom</h4>
                   <p className='text-zinc-500 text-[11px] mt-1 leading-snug'>
                     No browser extensions, seed phrases, or wallet approval
                     popups.
@@ -248,10 +248,10 @@ export function OnboardingModal({
 
               <div className='p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col justify-between'>
                 <div>
-                  <div className='h-8 w-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-2 font-bold'>
+                  <div className='h-8 w-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-2 '>
                     02
                   </div>
-                  <h4 className='font-bold text-zinc-900'>Email Terminal</h4>
+                  <h4 className=' text-zinc-900'>Email Terminal</h4>
                   <p className='text-zinc-500 text-[11px] mt-1 leading-snug'>
                     Deal memos arrive in your inbox. Reply in plain English to
                     execute.
@@ -261,13 +261,13 @@ export function OnboardingModal({
 
               <div className='p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col justify-between'>
                 <div>
-                  <div className='h-8 w-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-2 font-bold'>
+                  <div className='h-8 w-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-2 '>
                     03
                   </div>
-                  <h4 className='font-bold text-zinc-900'>Solana Devnet</h4>
+                  <h4 className=' text-zinc-900'>Solana Devnet</h4>
                   <p className='text-zinc-500 text-[11px] mt-1 leading-snug'>
-                    Trades settle on-chain in 400ms with Chainlink 1:1
-                    Proof-of-Reserve.
+                    Trades settle on-chain in 400ms with 1:1 SPV backing on
+                    Solana.
                   </p>
                 </div>
               </div>
@@ -277,7 +277,7 @@ export function OnboardingModal({
               onSubmit={handleSaveEmail}
               className='mt-2 flex flex-col gap-3'
             >
-              <label className='font-pixel text-xs font-bold text-zinc-800'>
+              <label className='font-pixel text-xs  text-zinc-800'>
                 Enter your email to generate your investor account &amp; wallet:
               </label>
               <div className='flex gap-2'>
@@ -309,7 +309,7 @@ export function OnboardingModal({
               </h2>
               <p className='mt-2 font-pixel text-xs sm:text-sm text-zinc-600 leading-relaxed'>
                 Preflight generated a dedicated Solana Devnet wallet for{' '}
-                <span className='font-bold text-zinc-900'>
+                <span className=' text-zinc-900'>
                   {userEmail || emailInput}
                 </span>
                 . Fund it with free Devnet SOL to power on-chain gas settlement.
@@ -318,7 +318,7 @@ export function OnboardingModal({
 
             <div className='rounded-2xl bg-zinc-50 p-4 border border-zinc-200 space-y-3'>
               <div className='flex items-center justify-between'>
-                <span className='font-pixel text-[11px] uppercase tracking-wider text-zinc-400 font-bold'>
+                <span className='font-pixel text-[11px] uppercase tracking-wider text-zinc-400 '>
                   Your Dedicated Solana Address
                 </span>
                 <span className='font-pixel text-[10px] text-zinc-500 bg-white px-2 py-0.5 rounded-full border border-zinc-200'>
@@ -371,17 +371,17 @@ export function OnboardingModal({
               <div className='flex items-center justify-between pt-1 font-pixel text-xs'>
                 <div className='flex items-center gap-2'>
                   <span className='text-zinc-500'>Balance:</span>
-                  <span className='font-bold text-zinc-900 text-sm'>
+                  <span className=' text-zinc-900 text-sm'>
                     {walletInfo?.balanceSol?.toFixed(3) || '0.000'} SOL
                   </span>
                 </div>
                 {walletInfo?.isFunded ? (
-                  <span className='inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] text-emerald-700 border border-emerald-200 font-bold'>
+                  <span className='inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] text-emerald-700 border border-emerald-200 '>
                     <ShieldCheck className='h-3 w-3' />
                     Funded &amp; Ready
                   </span>
                 ) : (
-                  <span className='rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] text-amber-700 border border-amber-200 font-bold'>
+                  <span className='rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] text-amber-700 border border-amber-200 '>
                     Needs Gas
                   </span>
                 )}
@@ -444,7 +444,7 @@ export function OnboardingModal({
                 type='button'
                 onClick={handleAirdrop}
                 disabled={isAirdropping}
-                className='flex-1 flex items-center justify-center gap-2 rounded-2xl bg-black hover:bg-zinc-800 text-white py-3 px-4 font-pixel text-xs font-bold shadow-md transition disabled:opacity-50'
+                className='flex-1 flex items-center justify-center gap-2 rounded-2xl bg-black hover:bg-zinc-800 text-white py-3 px-4 font-pixel text-xs  shadow-md transition disabled:opacity-50'
               >
                 <Droplets
                   className={`h-4 w-4 text-blue-400 ${isAirdropping ? 'animate-pulse' : ''}`}
@@ -503,7 +503,7 @@ export function OnboardingModal({
 
             <div className='rounded-2xl bg-blue-50/70 p-5 border border-blue-200 space-y-4'>
               <div className='flex items-center justify-between'>
-                <span className='font-pixel text-[11px] uppercase tracking-wider text-blue-700 font-bold'>
+                <span className='font-pixel text-[11px] uppercase tracking-wider text-blue-700 '>
                   Preflight Broker Agent Email
                 </span>
                 <span className='font-pixel text-[10px] text-blue-700 bg-white px-2 py-0.5 rounded-full border border-blue-200'>
@@ -521,7 +521,7 @@ export function OnboardingModal({
                       showInitial={false}
                     />
                   </div>
-                  <code className='font-mono text-xs sm:text-sm text-blue-950 font-bold select-all'>
+                  <code className='font-mono text-xs sm:text-sm text-blue-950  select-all'>
                     {PREFLIGHT_AGENT_EMAIL}
                   </code>
                 </div>
@@ -531,7 +531,7 @@ export function OnboardingModal({
                   onClick={() =>
                     copyToClipboard(PREFLIGHT_AGENT_EMAIL, 'email')
                   }
-                  className='flex-shrink-0 flex items-center gap-1 rounded-lg bg-blue-600 hover:bg-blue-700 px-3.5 py-1.5 text-xs font-pixel text-white font-bold transition shadow-xs'
+                  className='flex-shrink-0 flex items-center gap-1 rounded-lg bg-blue-600 hover:bg-blue-700 px-3.5 py-1.5 text-xs font-pixel text-white  transition shadow-xs'
                 >
                   {copiedEmail ? (
                     <>
@@ -596,53 +596,43 @@ export function OnboardingModal({
 
             <div className='space-y-2.5 font-pixel text-xs'>
               <div className='p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-start gap-3'>
-                <div className='h-6 w-6 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center shrink-0 text-[11px]'>
+                <div className='h-6 w-6 rounded-full bg-blue-100 text-blue-700  flex items-center justify-center shrink-0 text-[11px]'>
                   1
                 </div>
                 <div>
-                  <span className='font-bold text-zinc-900'>
+                  <span className=' text-zinc-900'>
                     Institutional Deal Memo Dispatched
                   </span>
                   <p className='text-zinc-500 text-[11px] mt-0.5'>
-                    When secondary market spreads move &gt; 3% on PreStocks or
-                    Tessera, the agent emails you a detailed valuation memo with
-                    share price and implied cap.
+                    When secondary market spreads move &gt; 3% on PreStocks, the
+                    agent emails you a detailed valuation memo with share price
+                    and implied cap.
                   </p>
                 </div>
               </div>
 
               <div className='p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-start gap-3'>
-                <div className='h-6 w-6 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center shrink-0 text-[11px]'>
+                <div className='h-6 w-6 rounded-full bg-emerald-100 text-emerald-700  flex items-center justify-center shrink-0 text-[11px]'>
                   2
                 </div>
                 <div>
-                  <span className='font-bold text-zinc-900'>
-                    Reply In Plain English
-                  </span>
+                  <span className=' text-zinc-900'>Reply In Plain English</span>
                   <p className='text-zinc-500 text-[11px] mt-0.5'>
                     Simply hit Reply and type{' '}
-                    <span className='font-mono text-zinc-800 font-bold'>
-                      BUY $250
-                    </span>
-                    ,{' '}
-                    <span className='font-mono text-zinc-800 font-bold'>
-                      CONFIRM
-                    </span>
-                    , or{' '}
-                    <span className='font-mono text-zinc-800 font-bold'>
-                      PORTFOLIO
-                    </span>
-                    .
+                    <span className='font-mono text-zinc-800 '>BUY $250</span>,{' '}
+                    <span className='font-mono text-zinc-800 '>CONFIRM</span>,
+                    or{' '}
+                    <span className='font-mono text-zinc-800 '>PORTFOLIO</span>.
                   </p>
                 </div>
               </div>
 
               <div className='p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-start gap-3'>
-                <div className='h-6 w-6 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center shrink-0 text-[11px]'>
+                <div className='h-6 w-6 rounded-full bg-purple-100 text-purple-700  flex items-center justify-center shrink-0 text-[11px]'>
                   3
                 </div>
                 <div>
-                  <span className='font-bold text-zinc-900'>
+                  <span className=' text-zinc-900'>
                     Autonomous Solana Devnet Settlement
                   </span>
                   <p className='text-zinc-500 text-[11px] mt-0.5'>

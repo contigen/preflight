@@ -158,7 +158,7 @@ export function BrokerModal({
               <span className='font-pixel text-xs text-zinc-500'>
                 Gas Balance:
               </span>
-              <span className='font-pixel text-sm font-bold text-zinc-900'>
+              <span className='font-pixel text-sm text-zinc-900'>
                 {brokerBalanceSol.toFixed(4)} SOL
               </span>
             </div>
@@ -181,7 +181,7 @@ export function BrokerModal({
 
         <div className='mt-3 rounded-2xl bg-blue-50/70 p-3.5 border border-blue-200/80'>
           <div className='flex items-center justify-between'>
-            <span className='font-pixel text-[11px] uppercase tracking-wider text-blue-700 font-bold'>
+            <span className='font-pixel text-[11px] uppercase tracking-wider text-blue-700 '>
               Agent Email Interface
             </span>
             <span className='inline-flex items-center gap-1 font-pixel text-[10px] text-blue-700 bg-white px-2 py-0.5 rounded-full border border-blue-200'>
@@ -190,7 +190,7 @@ export function BrokerModal({
           </div>
 
           <div className='mt-2 flex items-center justify-between gap-2 bg-white rounded-xl p-2.5 border border-blue-200/80'>
-            <code className='font-pixel text-xs text-blue-900 select-all font-mono'>
+            <code className='font-pixel text-xs text-blue-900 select-all'>
               {PREFLIGHT_AGENT_EMAIL}
             </code>
             <a
@@ -221,7 +221,7 @@ export function BrokerModal({
               <div className='flex items-start gap-2'>
                 <AlertCircle className='h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0' />
                 <div className='font-pixel text-xs space-y-1'>
-                  <p className='font-bold'>Broker Needs Devnet SOL For Gas</p>
+                  <p className=''>Broker Needs Devnet SOL For Gas</p>
                   <p className='text-amber-800 text-[11px] leading-relaxed'>
                     To keep trades 100% genuine on Solana Devnet, the agent
                     broker needs a fraction of a cent of Devnet SOL to pay
@@ -245,7 +245,7 @@ export function BrokerModal({
               href={`https://faucet.solana.com`}
               target='_blank'
               rel='noopener noreferrer'
-              className='flex-1 flex items-center justify-center gap-2 rounded-2xl bg-black hover:bg-zinc-800 text-white py-3 px-4 font-pixel text-xs font-bold shadow-md transition'
+              className='flex-1 flex items-center justify-center gap-2 rounded-2xl bg-black hover:bg-zinc-800 text-white py-3 px-4 font-pixel text-xs  shadow-md transition'
             >
               <span>Get 1 SOL at Faucet.solana.com</span>
               <ExternalLink className='h-3.5 w-3.5' />

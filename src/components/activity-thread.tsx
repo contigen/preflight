@@ -24,11 +24,7 @@ export function ActivityThread({
 }: ActivityThreadProps) {
   let totalValue = 0
   for (const pos of Object.values(positions)) {
-    const t = tokens.find(
-      tok =>
-        tok.symbol === pos.symbol ||
-        tok.symbol === pos.symbol.replace('T-', ''),
-    )
+    const t = tokens.find(tok => tok.symbol === pos.symbol)
     const price = t?.tokenPrice || pos.avgPrice
     totalValue += pos.qty * price
   }
@@ -38,7 +34,7 @@ export function ActivityThread({
       <div className='flex items-center justify-between pb-6 border-b border-zinc-100'>
         <div>
           <div className='font-hand text-2xl text-zinc-500'>Your Balance</div>
-          <div className='font-pixel text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mt-0.5'>
+          <div className='font-pixel text-3xl sm:text-4xl tracking-tight text-zinc-900 mt-0.5'>
             $
             {totalValue.toLocaleString('en-US', {
               minimumFractionDigits: 2,
@@ -74,7 +70,7 @@ export function ActivityThread({
               return (
                 <div key={item.id} className='flex justify-end'>
                   <div className='bg-black text-white rounded-3xl rounded-tr-sm p-4 max-w-[280px] shadow-sm'>
-                    <div className='flex items-center gap-1 font-pixel text-xs text-zinc-300 font-bold'>
+                    <div className='flex items-center gap-1 font-pixel text-xs text-zinc-300'>
                       <ArrowUpRight className='h-3 w-3 text-blue-400' />
                       <span>
                         {item.type === 'TRADE_EXECUTED' ? 'Bought' : 'Sold'}{' '}
@@ -82,7 +78,7 @@ export function ActivityThread({
                       </span>
                     </div>
 
-                    <div className='font-pixel text-2xl font-bold text-white mt-1'>
+                    <div className='font-pixel text-2xl  text-white mt-1'>
                       ${Number(amount).toFixed(2)}
                     </div>
 
@@ -115,7 +111,7 @@ export function ActivityThread({
                   />
                 </div>
                 <div className='bg-zinc-100 text-zinc-900 rounded-3xl rounded-tl-sm p-4 max-w-[280px] border border-zinc-200/60 shadow-xs'>
-                  <div className='flex items-center gap-1 font-pixel text-xs text-zinc-600 font-bold'>
+                  <div className='flex items-center gap-1 font-pixel text-xs text-zinc-600'>
                     <ArrowDownLeft className='h-3 w-3 text-blue-600' />
                     <span>
                       {item.type === 'DEAL_ALERT'
@@ -125,7 +121,7 @@ export function ActivityThread({
                   </div>
 
                   {item.symbol && (
-                    <div className='font-pixel text-xl font-bold text-blue-600 mt-1'>
+                    <div className='font-pixel text-xl text-blue-600 mt-1'>
                       {item.symbol}
                     </div>
                   )}

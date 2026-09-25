@@ -320,7 +320,7 @@ export function PreflightView({
               onClick={() => setActiveTab('DEAL')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'DEAL'
-                  ? 'bg-white text-black font-bold shadow-xs'
+                  ? 'bg-white text-black  shadow-xs'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -333,7 +333,7 @@ export function PreflightView({
               onClick={() => setActiveTab('MARKETS')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'MARKETS'
-                  ? 'bg-white text-black font-bold shadow-xs'
+                  ? 'bg-white text-black  shadow-xs'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -346,7 +346,7 @@ export function PreflightView({
               onClick={() => setActiveTab('ACTIVITY')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'ACTIVITY'
-                  ? 'bg-white text-black font-bold shadow-xs'
+                  ? 'bg-white text-black  shadow-xs'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -359,7 +359,7 @@ export function PreflightView({
               onClick={() => setActiveTab('GUIDE')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'GUIDE'
-                  ? 'bg-white text-black font-bold shadow-xs'
+                  ? 'bg-white text-black  shadow-xs'
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -370,7 +370,7 @@ export function PreflightView({
             <button
               type='button'
               onClick={() => setIsOnboardingOpen(true)}
-              className='flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-blue-600 hover:text-blue-800 transition font-bold'
+              className='flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-blue-600 hover:text-blue-800 transition '
             >
               <Compass className='h-3.5 w-3.5' />
               <span>Directive</span>
@@ -400,7 +400,7 @@ export function PreflightView({
                     : '...'}
                 </span>
                 <span
-                  className={`ml-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-bold ${
+                  className={`ml-0.5 px-1.5 py-0.2 rounded-full text-[9px]  ${
                     userWallet?.isFunded
                       ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                       : 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -474,35 +474,35 @@ export function PreflightView({
           <button
             type='button'
             onClick={() => setActiveTab('DEAL')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'DEAL' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'DEAL' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             Deal Flow
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('MARKETS')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'MARKETS' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'MARKETS' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             Markets
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('ACTIVITY')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'ACTIVITY' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'ACTIVITY' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             Holdings
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('GUIDE')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'GUIDE' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'GUIDE' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             How It Works
           </button>
           <button
             type='button'
             onClick={() => setIsOnboardingOpen(true)}
-            className='rounded-full px-3 py-1 transition text-blue-600 font-bold'
+            className='rounded-full px-3 py-1 transition text-blue-600 '
           >
             Directive
           </button>
@@ -595,9 +595,7 @@ export function PreflightView({
           <div>
             Preflight • The Autonomous Pre-IPO Broker • Stocklana Hackathon
           </div>
-          <div>
-            PreStocks ($10K) • Tessera ($6K) • Chainlink Proof of Reserve
-          </div>
+          <div>PreStocks Track Submission ($10,000 Bounty)</div>
         </div>
       </footer>
 
@@ -713,7 +711,7 @@ export function PreflightView({
                 Preflight is designed so you never need to connect Phantom or
                 approve wallet popups. The autonomous broker agent signed and
                 confirmed this trade on Solana Devnet on behalf of{' '}
-                <span className='font-bold text-blue-950'>
+                <span className=' text-blue-950'>
                   {userEmail || 'your account'}
                 </span>
                 .
@@ -723,19 +721,19 @@ export function PreflightView({
             <div className='mt-4 space-y-2.5 font-pixel text-xs border border-zinc-200/80 rounded-2xl p-4 bg-zinc-50/60'>
               <div className='flex justify-between items-center'>
                 <span className='text-zinc-500'>Asset:</span>
-                <span className='font-bold text-zinc-900'>
+                <span className=' text-zinc-900'>
                   {tradeReceipt.token.name} ({tradeReceipt.token.symbol})
                 </span>
               </div>
               <div className='flex justify-between items-center'>
                 <span className='text-zinc-500'>Order:</span>
-                <span className='font-bold text-blue-600'>
+                <span className=' text-blue-600'>
                   {tradeReceipt.action} ${tradeReceipt.amountUsd}
                 </span>
               </div>
               <div className='flex justify-between items-center'>
                 <span className='text-zinc-500'>Tokens Acquired:</span>
-                <span className='font-bold text-zinc-800'>
+                <span className=' text-zinc-800'>
                   {(
                     tradeReceipt.amountUsd / tradeReceipt.token.tokenPrice
                   ).toFixed(4)}{' '}
@@ -744,7 +742,7 @@ export function PreflightView({
               </div>
               <div className='flex justify-between items-center'>
                 <span className='text-zinc-500'>Execution Keypair:</span>
-                <span className='text-emerald-700 font-bold'>
+                <span className='text-emerald-700 '>
                   Autonomous Devnet Broker
                 </span>
               </div>

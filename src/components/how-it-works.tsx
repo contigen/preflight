@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Database,
   Activity,
-  RefreshCw,
 } from 'lucide-react'
 import { Facehash } from 'facehash'
 import { PREFLIGHT_AGENT_EMAIL } from '@/lib/constants'
@@ -39,14 +38,14 @@ export function HowItWorks({
     {
       num: '01',
       title: 'Set Your Deal Profile',
-      desc: 'Subscribe with your email and specify your target sectors (AI, Space, Defense) and maximum allocation per deal ($100 - $1,000).',
+      desc: 'Subscribe with your email and specify your target sectors (AI, Space, Defense, Robotics) and maximum allocation per deal ($100 - $1,000).',
       icon: Mail,
       badge: 'No Wallet Setup',
     },
     {
       num: '02',
       title: 'Autonomous Market Scanning',
-      desc: "Preflight's AI engine monitors PreStocks and Tessera secondary markets 24/7. When prices move > 3% or new liquidity unlocks, you receive an institutional Deal Memo in your inbox.",
+      desc: "Preflight's AI engine monitors PreStocks secondary markets 24/7. When prices move > 3% or new liquidity unlocks, you receive an institutional Deal Memo in your inbox.",
       icon: Activity,
       badge: '24/7 Dealflow',
     },
@@ -60,7 +59,7 @@ export function HowItWorks({
     {
       num: '04',
       title: 'On-Chain Settlement',
-      desc: 'Your broker agent executes the allocation instantly on Solana Devnet. Every position is backed 1:1 on-chain and auditable via Chainlink Proof of Reserve.',
+      desc: 'Your broker agent executes the allocation instantly on Solana Devnet. Every position is backed 1:1 by SPVs holding private company equity.',
       icon: ShieldCheck,
       badge: 'Solana Devnet',
     },
@@ -76,9 +75,8 @@ export function HowItWorks({
           How Preflight Works
         </h1>
         <p className='font-pixel text-xs sm:text-sm text-zinc-600 leading-relaxed max-w-xl'>
-          The first time you can invest in pre-IPO companies on Solana without
-          touching a wallet. Email is the interface. The agent is the broker.
-          The chain is the runway.
+          Invest in pre-IPO companies on Solana through email. The inbox is the
+          interface. The agent is the broker.
         </p>
       </div>
 
@@ -120,73 +118,73 @@ export function HowItWorks({
             <div className='flex items-center gap-2 mb-3'>
               <Database className='h-5 w-5 text-zinc-800' />
               <h3 className='font-hand text-3xl text-zinc-900'>
-                Supported Asset Classes
+                PreStocks Assets &amp; Architecture
               </h3>
             </div>
             <p className='font-pixel text-xs text-zinc-600 mb-5 leading-relaxed'>
-              Preflight ingests real secondary liquidity feeds from two Solana
-              pre-IPO market makers:
+              Preflight ingests real secondary liquidity feeds directly from
+              PreStocks on Solana:
             </p>
 
             <div className='flex flex-col gap-4 font-pixel text-xs'>
               <div className='p-4 rounded-xl bg-zinc-50 border border-zinc-200'>
                 <div className='flex items-center justify-between mb-1'>
                   <span className='font-hand text-xl text-zinc-900'>
-                    PreStocks (8 Assets)
+                    PreStocks (8 Primary Assets)
                   </span>
                   <span className='font-pixel text-[11px] text-emerald-600 font-bold'>
-                    0% Protocol Fee
+                    0% Transfer Fee
                   </span>
                 </div>
-                <p className='text-zinc-500 mb-2'>
+                <p className='text-zinc-500 mb-3'>
                   Special Purpose Vehicle (SPV) equity shares wrapped as
-                  standard Solana SPL tokens.
+                  standard Solana SPL tokens with 1:1 economic backing.
                 </p>
-                <div className='flex flex-wrap gap-1 font-pixel text-[10px]'>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    ANDURIL
-                  </span>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    ANTHROPIC
-                  </span>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    FIGUREAI
-                  </span>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    KALSHI
-                  </span>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    OPENAI
-                  </span>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    SPACEX
-                  </span>
-                </div>
-              </div>
-
-              <div className='p-4 rounded-xl bg-zinc-50 border border-zinc-200'>
-                <div className='flex items-center justify-between mb-1'>
-                  <span className='font-hand text-xl text-zinc-900'>
-                    Tessera T-Tokens (3 Assets)
-                  </span>
-                  <span className='font-pixel text-[11px] text-blue-600 font-bold'>
-                    0.20% Transfer Fee (Token-2022)
-                  </span>
-                </div>
-                <p className='text-zinc-500 mb-2'>
-                  Token-2022 standard with programmatic transfer fees, audited
-                  custodians, and Chainlink 1:1 Proof-of-Reserve.
-                </p>
-                <div className='flex flex-wrap gap-1 font-pixel text-[10px]'>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    T-OpenAI
-                  </span>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    T-Kalshi
-                  </span>
-                  <span className='bg-white px-2 py-0.5 rounded border border-zinc-200'>
-                    T-SpaceX
-                  </span>
+                <div className='grid grid-cols-2 gap-2 font-pixel text-[11px]'>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>ANDURIL</div>
+                    <div className='text-zinc-400 text-[10px]'>Defense AI</div>
+                  </div>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>ANTHROPIC</div>
+                    <div className='text-zinc-400 text-[10px]'>Claude AI</div>
+                  </div>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>FIGUREAI</div>
+                    <div className='text-zinc-400 text-[10px]'>
+                      Humanoid Robots
+                    </div>
+                  </div>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>KALSHI</div>
+                    <div className='text-zinc-400 text-[10px]'>
+                      Regulated Forecasts
+                    </div>
+                  </div>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>NEURALINK</div>
+                    <div className='text-zinc-400 text-[10px]'>
+                      Brain-Computer Interface
+                    </div>
+                  </div>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>OPENAI</div>
+                    <div className='text-zinc-400 text-[10px]'>
+                      ChatGPT / Frontier AI
+                    </div>
+                  </div>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>POLYMARKET</div>
+                    <div className='text-zinc-400 text-[10px]'>
+                      Global Prediction Markets
+                    </div>
+                  </div>
+                  <div className='p-2 bg-white rounded border border-zinc-200'>
+                    <div className='font-bold text-zinc-900'>SPACEX</div>
+                    <div className='text-zinc-400 text-[10px]'>
+                      Starlink &amp; Launch
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -263,7 +261,7 @@ export function HowItWorks({
 
           <div className='mt-6 pt-4 border-t border-zinc-800 flex items-center justify-between'>
             <span className='text-xs font-pixel text-zinc-400'>
-              Ready to try it live?
+              Ready to allocate?
             </span>
             <button
               type='button'

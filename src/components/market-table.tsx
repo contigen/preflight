@@ -1,13 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import {
-  Search,
-  ExternalLink,
-  ShieldCheck,
-  Info,
-  ArrowRight,
-} from 'lucide-react'
+import { Search, Info, ShieldCheck } from 'lucide-react'
 import type { Token } from '@/types'
 
 type MarketTableProps = {
@@ -21,12 +15,13 @@ export function MarketTable({
   onSelectTokenForTrade,
   onOpenDossier,
 }: MarketTableProps) {
-  const [filter, setFilter] = useState<'ALL' | 'PRESTOCKS' | 'TESSERA'>('ALL')
+  const [sectorFilter, setSectorFilter] = useState<string>('ALL')
   const [search, setSearch] = useState<string>('')
 
+  const sectors = ['ALL', 'AI', 'Space', 'Defense', 'Prediction Markets']
+
   const filtered = tokens.filter(t => {
-    if (filter === 'PRESTOCKS' && t.source !== 'PreStocks') return false
-    if (filter === 'TESSERA' && t.source !== 'Tessera') return false
+    if (sectorFilter !== 'ALL' && t.sector !== sectorFilter) return false
     if (search.trim()) {
       const q = search.toLowerCase()
       return (
@@ -43,14 +38,14 @@ export function MarketTable({
       <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-zinc-100'>
         <div>
           <h2 className='font-hand text-3xl text-zinc-900'>
-            Pre-IPO Secondary Markets
+            PreStocks Pre-IPO Markets
           </h2>
           <p className='font-pixel text-xs text-zinc-400 mt-0.5'>
-            11 private equity tokens on Solana • PreStocks &amp; Tessera
+            8 private equity tokens on Solana • 1:1 SPV-backed SPL tokens
           </p>
         </div>
 
-        <div className='flex items-center gap-2'>
+        <div className='flex flex-wrap items-center gap-2'>
           <div className='relative'>
             <Search className='absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400' />
             <input
@@ -63,39 +58,20 @@ export function MarketTable({
           </div>
 
           <div className='flex items-center rounded-full bg-zinc-100 p-1 text-xs font-pixel'>
-            <button
-              type='button'
-              onClick={() => setFilter('ALL')}
-              className={`rounded-full px-3 py-1 transition ${
-                filter === 'ALL'
-                  ? 'bg-white text-black shadow-xs font-bold'
-                  : 'text-zinc-500'
-              }`}
-            >
-              All (11)
-            </button>
-            <button
-              type='button'
-              onClick={() => setFilter('PRESTOCKS')}
-              className={`rounded-full px-3 py-1 transition ${
-                filter === 'PRESTOCKS'
-                  ? 'bg-white text-black shadow-xs font-bold'
-                  : 'text-zinc-500'
-              }`}
-            >
-              PreStocks
-            </button>
-            <button
-              type='button'
-              onClick={() => setFilter('TESSERA')}
-              className={`rounded-full px-3 py-1 transition ${
-                filter === 'TESSERA'
-                  ? 'bg-white text-black shadow-xs font-bold'
-                  : 'text-zinc-500'
-              }`}
-            >
-              Tessera
-            </button>
+            {sectors.map(sec => (
+              <button
+                key={sec}
+                type='button'
+                onClick={() => setSectorFilter(sec)}
+                className={`rounded-full px-3 py-1 transition ${
+                  sectorFilter === sec
+                    ? 'bg-white text-black shadow-xs font-bold'
+                    : 'text-zinc-500'
+                }`}
+              >
+                {sec === 'Prediction Markets' ? 'Markets' : sec}
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -118,8 +94,8 @@ export function MarketTable({
                   <span className='font-pixel text-xs text-zinc-400 font-bold'>
                     {token.symbol}
                   </span>
-                  <span className='rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-pixel text-zinc-500 border border-zinc-200'>
-                    {token.source === 'Tessera' ? 'Token-2022' : 'SPV'}
+                  <span className='rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-pixel text-blue-700 border border-blue-200'>
+                    SPV 1:1
                   </span>
                 </div>
                 <div className='mt-0.5 text-[11px] font-pixel text-zinc-400'>
@@ -127,7 +103,7 @@ export function MarketTable({
                   {token.markValuation
                     ? `$${(token.markValuation / 1e9).toFixed(1)}B`
                     : 'N/A'}{' '}
-                  • Fee: {token.transferFeePct}%
+                  • NAV Prem: {token.premium || '0'}% • Fee: 0%
                 </div>
               </div>
             </div>
@@ -137,21 +113,10 @@ export function MarketTable({
                 <div className='font-pixel text-lg sm:text-xl font-bold text-blue-600'>
                   ${token.tokenPrice.toFixed(2)}
                 </div>
-                {token.porFeed ? (
-                  <a
-                    href={`https://data.chain.link/streams/${token.porFeed}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='inline-flex items-center gap-0.5 text-[10px] font-pixel text-cyan-700 hover:underline'
-                  >
-                    <ShieldCheck className='h-3 w-3' />
-                    <span>Chainlink PoR</span>
-                  </a>
-                ) : (
-                  <span className='text-[10px] font-pixel text-zinc-400'>
-                    Audited SPV
-                  </span>
-                )}
+                <div className='inline-flex items-center gap-0.5 text-[10px] font-pixel text-emerald-600'>
+                  <ShieldCheck className='h-3 w-3' />
+                  <span>PreStocks SPV</span>
+                </div>
               </div>
 
               <div className='flex items-center gap-1.5'>

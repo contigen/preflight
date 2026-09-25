@@ -22,7 +22,7 @@ export function TokenModal({ token, onClose, onTrade }: TokenModalProps) {
               {token.name} ({token.symbol})
             </h3>
             <p className='font-pixel text-xs text-zinc-400'>
-              {token.source} • {token.legalStructure}
+              PreStocks • SPV-backed SPL Token
             </p>
           </div>
           <button
@@ -41,11 +41,19 @@ export function TokenModal({ token, onClose, onTrade }: TokenModalProps) {
 
           <div className='rounded-2xl bg-zinc-50 p-4 space-y-2.5 font-pixel text-xs border border-zinc-200/60'>
             <div className='flex justify-between'>
-              <span className='text-zinc-500'>Price:</span>
+              <span className='text-zinc-500'>Token Price:</span>
               <span className='text-blue-600 font-bold'>
                 ${token.tokenPrice.toFixed(2)}
               </span>
             </div>
+            {token.markPrice && (
+              <div className='flex justify-between'>
+                <span className='text-zinc-500'>Secondary Mark Price:</span>
+                <span className='text-zinc-800 font-bold'>
+                  ${token.markPrice.toFixed(2)}
+                </span>
+              </div>
+            )}
             <div className='flex justify-between'>
               <span className='text-zinc-500'>Implied Valuation:</span>
               <span className='text-zinc-800 font-bold'>
@@ -54,12 +62,18 @@ export function TokenModal({ token, onClose, onTrade }: TokenModalProps) {
                   : 'N/A'}
               </span>
             </div>
+            {token.premium && (
+              <div className='flex justify-between'>
+                <span className='text-zinc-500'>NAV Premium / Discount:</span>
+                <span className='text-emerald-600 font-bold'>
+                  {token.premium}%
+                </span>
+              </div>
+            )}
             <div className='flex justify-between'>
               <span className='text-zinc-500'>Transfer Fee:</span>
-              <span className='text-zinc-800'>
-                {token.transferFeePct > 0
-                  ? '0.20% (Token-2022 standard)'
-                  : '0.00% (No fee)'}
+              <span className='text-zinc-800 font-bold'>
+                0.00% (Standard SPL token)
               </span>
             </div>
             {token.contractAddress && (
@@ -83,18 +97,17 @@ export function TokenModal({ token, onClose, onTrade }: TokenModalProps) {
             )}
           </div>
 
-          {token.porFeed && (
-            <div className='rounded-2xl border border-blue-200 bg-blue-50/50 p-3.5'>
-              <div className='flex items-center gap-1.5 font-hand text-blue-900 text-lg'>
-                <ShieldCheck className='h-4 w-4 text-blue-600' />
-                <span>Chainlink Proof of Reserve (1:1 Verified Backing)</span>
-              </div>
-              <p className='mt-1 text-[11px] font-pixel text-blue-800/80'>
-                Private shares custody verified monthly by independent auditors.
-                Oracle updates stream continuously to Solana.
-              </p>
+          <div className='rounded-2xl border border-blue-200 bg-blue-50/50 p-3.5'>
+            <div className='flex items-center gap-1.5 font-hand text-blue-900 text-lg'>
+              <ShieldCheck className='h-4 w-4 text-blue-600' />
+              <span>PreStocks SPV Backing (1:1 Equity Exposure)</span>
             </div>
-          )}
+            <p className='mt-1 text-[11px] font-pixel text-blue-800/80'>
+              Each token represents beneficial ownership in a Special Purpose
+              Vehicle holding actual private company equity shares. Tradeable on
+              Solana DEXs with instant settlement.
+            </p>
+          </div>
         </div>
 
         <div className='mt-6 flex justify-end gap-2 border-t border-zinc-100 pt-4'>

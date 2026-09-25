@@ -161,7 +161,7 @@ export function DealCard({
               }}
               className={`rounded-full px-3.5 py-1 text-xs font-pixel transition ${
                 selectedSymbol === t.symbol
-                  ? 'bg-black text-white shadow-xs font-bold'
+                  ? 'bg-black text-white shadow-xs '
                   : 'text-zinc-600 hover:text-black'
               }`}
             >
@@ -179,7 +179,7 @@ export function DealCard({
             <span className='font-hand text-4xl sm:text-5xl text-zinc-900 tracking-wide'>
               {action === 'BUY' ? 'Sending' : 'Selling'}
             </span>
-            <span className='font-pixel text-4xl sm:text-5xl font-bold tracking-tight text-blue-600'>
+            <span className='font-pixel text-4xl sm:text-5xl  tracking-tight text-blue-600'>
               ${amountUsd}
             </span>
           </div>
@@ -190,15 +190,8 @@ export function DealCard({
 
           <div className='mt-2 flex items-center gap-2'>
             <span className='rounded-full bg-zinc-100 px-2.5 py-0.5 text-[11px] font-pixel text-zinc-600 border border-zinc-200'>
-              {selectedToken?.source === 'Tessera'
-                ? 'Token-2022 • 0.20% fee'
-                : 'PreStocks • SPV 0% fee'}
+              PreStocks • SPV 0% fee
             </span>
-            {selectedToken?.porFeed && (
-              <span className='rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-pixel text-blue-700 border border-blue-200 font-bold'>
-                PoR 1:1
-              </span>
-            )}
           </div>
 
           <p className='mt-3 text-xs font-pixel text-zinc-400'>
@@ -214,7 +207,7 @@ export function DealCard({
               onClick={() => setAmountUsd(amt)}
               className={`rounded-full px-3 py-1 text-xs font-pixel transition ${
                 amountUsd === amt
-                  ? 'bg-blue-600 text-white font-bold'
+                  ? 'bg-blue-600 text-white '
                   : 'bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300'
               }`}
             >
@@ -265,7 +258,7 @@ export function DealCard({
                   : 'Generating...'}
               </span>
               <span
-                className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold border ${
+                className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px]  border ${
                   userWallet?.isFunded
                     ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                     : 'bg-amber-50 text-amber-700 border-amber-200'
@@ -319,8 +312,7 @@ export function DealCard({
             {userEmail ? (
               <>
                 Preflight Agent signs and executes directly on Solana Devnet on
-                behalf of{' '}
-                <span className='text-zinc-700 font-bold'>{userEmail}</span>.
+                behalf of <span className='text-zinc-700 '>{userEmail}</span>.
               </>
             ) : (
               <>
@@ -345,7 +337,7 @@ export function DealCard({
               <span className='font-hand text-xl text-zinc-900'>
                 Agent Deal Memo ({selectedToken?.symbol})
               </span>
-              <span className='text-[10px] font-pixel text-blue-600 font-bold'>
+              <span className='text-[10px] font-pixel text-blue-600 '>
                 Gemini Flash
               </span>
             </div>

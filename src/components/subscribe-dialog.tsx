@@ -126,7 +126,7 @@ export function SubscribeDialog({ isOpen, onClose }: SubscribeDialogProps) {
         ) : (
           <form onSubmit={handleSubmit} className='mt-4 space-y-3.5'>
             <div>
-              <label className='block font-pixel text-xs font-bold text-zinc-800'>
+              <label className='block font-pixel text-xs  text-zinc-800'>
                 Your Email
               </label>
               <input
@@ -140,7 +140,7 @@ export function SubscribeDialog({ isOpen, onClose }: SubscribeDialogProps) {
             </div>
 
             <div>
-              <label className='block font-pixel text-xs font-bold text-zinc-800'>
+              <label className='block font-pixel text-xs text-zinc-800'>
                 Your Name (Optional)
               </label>
               <input
@@ -153,7 +153,7 @@ export function SubscribeDialog({ isOpen, onClose }: SubscribeDialogProps) {
             </div>
 
             <div>
-              <label className='block font-pixel text-xs font-bold text-zinc-800'>
+              <label className='block font-pixel text-xs text-zinc-800'>
                 Max Allocation per Deal ($)
               </label>
               <input
@@ -165,7 +165,7 @@ export function SubscribeDialog({ isOpen, onClose }: SubscribeDialogProps) {
             </div>
 
             <div>
-              <label className='block font-pixel text-xs font-bold text-zinc-800 mb-1.5'>
+              <label className='block font-pixel text-xs text-zinc-800 mb-1.5'>
                 Sectors of Interest
               </label>
               <div className='flex flex-wrap gap-1.5'>
@@ -178,7 +178,7 @@ export function SubscribeDialog({ isOpen, onClose }: SubscribeDialogProps) {
                       onClick={() => toggleSector(sec)}
                       className={`rounded-full px-3 py-1 font-pixel text-xs transition ${
                         active
-                          ? 'bg-black text-white font-bold'
+                          ? 'bg-black text-white '
                           : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
                       }`}
                     >
