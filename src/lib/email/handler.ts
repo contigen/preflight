@@ -6,11 +6,6 @@ import {
 import { fetchAllTokens } from '../tokens/aggregator'
 import { db } from '../db/store'
 import { executeDevnetTrade, calculateTradeQuote } from '../solana/devnet'
-import {
-  buildRedemptionAlert,
-  fetchTesseraAuction,
-  TESSERA,
-} from '../tokens/tessera'
 import { sendEmail } from './client'
 import { start } from 'workflow/api'
 import { dealAlertWorkflow, orderQuoteWorkflow } from '@/workflows/deal-flow'
@@ -61,7 +56,7 @@ export async function handleSubscribe(
     await sendEmail('subscribe', {
       to: from,
       subject: "Re: You're already subscribed to Preflight",
-      text: `Hey! You're already subscribed to Preflight deal alerts.\n\nWe monitor PreStocks and Tessera 24/7 for you.\nReply BUY <amount> to any alert to invest, or reply PORTFOLIO to check your positions.\n\n— Preflight`,
+      text: `Hey! You're already subscribed to Preflight deal alerts.\n\nWe monitor PreStocks pre-IPO markets 24/7 for you.\nReply BUY <amount> to any alert to invest, or reply PORTFOLIO to check your positions.\n\n— Preflight`,
     })
     return
   }
@@ -90,7 +85,6 @@ We've configured your deal stream:
 
 Markets Monitored:
 • PreStocks: ANDURIL, ANTHROPIC, FIGUREAI, KALSHI, NEURALINK, OPENAI, POLYMARKET, SPACEX
-• Tessera: T-OpenAI, T-Kalshi, T-SpaceX (Token-2022 + Chainlink PoR)
 
 How to invest:
 When an alert lands in your inbox, simply reply:
@@ -184,14 +178,6 @@ export async function handleAgentReply(
       })
       break
 
-    case 'REDEEM':
-      await handleRedeemInfo(from, cleanBody, threadId)
-      break
-
-    case 'AUCTION':
-      await handleAuctionInfo(from, cleanBody, threadId)
-      break
-
     default:
       if (
         cleanBody.length > 0 &&
@@ -249,17 +235,26 @@ async function handleBuyIntent(
       .slice(0, 8)
       .map(t => `${t.name} (${t.symbol}) - $${t.tokenPrice.toFixed(2)}`)
       .join('\n• ')
-
     await sendEmail('agent', {
       to: from,
-      subject: 'Select Asset to Buy',
-      text: `Which pre-IPO asset would you like to purchase?\n\nPlease specify the asset symbol in your reply, for example:\n  "BUY $100 ANTHROPIC"\n  "BUY $250 SPACEX"\n\nAvailable Assets:\n• ${symbolList}\n\n— Preflight`,
+      subject: 'Which asset would you like to buy?',
+      text: `Please specify the pre-IPO company you want to allocate to.\n\nAvailable PreStocks:\n• ${symbolList}\n\nExample reply:\n  BUY $200 ANTHROPIC\n  BUY 0.5 SPACEX\n\n— Preflight`,
       threadId,
     })
     return
   }
 
   const pricePerToken = token.tokenPrice
+  if (pricePerToken <= 0) {
+    await sendEmail('agent', {
+      to: from,
+      subject: `Price unavailable for ${token.symbol}`,
+      text: `Could not determine current price for ${token.name}. Please try again shortly.\n\n— Preflight`,
+      threadId,
+    })
+    return
+  }
+
   let amountUsd = parsed.amountUsd
   let tokenQty = parsed.tokenQty
 
@@ -268,35 +263,8 @@ async function handleBuyIntent(
   } else if (tokenQty && !amountUsd) {
     amountUsd = tokenQty * pricePerToken
   } else if (!amountUsd && !tokenQty) {
-    await sendEmail('agent', {
-      to: from,
-      subject: `Specify Amount for ${token.name}`,
-      text: `How much would you like to invest in ${token.name} (${token.symbol})?
-
-Current Price: $${pricePerToken.toFixed(2)}
-Examples:
-  BUY $200
-  BUY 0.5
-
-— Preflight`,
-      threadId,
-    })
-    return
-  }
-
-  const subscriber = db.getSubscriber(from)
-  if (subscriber && amountUsd! > subscriber.maxUsd) {
-    await sendEmail('agent', {
-      to: from,
-      subject: `Order Exceeds Risk Limit ($${subscriber.maxUsd})`,
-      text: `Your max deal size is set to $${subscriber.maxUsd}, but this order would be $${amountUsd!.toFixed(2)}.
-
-Reply "BUY $${subscriber.maxUsd}" to invest up to your limit, or "PASS" to cancel.
-
-— Preflight`,
-      threadId,
-    })
-    return
+    amountUsd = 100
+    tokenQty = 100 / pricePerToken
   }
 
   const existing = await db.fetchLatestPendingIntentFromRedis(from)
@@ -319,11 +287,6 @@ Reply "BUY $${subscriber.maxUsd}" to invest up to your limit, or "PASS" to cance
     pricePerToken,
   )
 
-  const transferFeeNote =
-    token.source === 'Tessera'
-      ? '\nToken-2022 Transfer Fee: 0.20% (standard built-in protocol fee)'
-      : ''
-
   await sendEmail('agent', {
     to: from,
     subject: `Confirm Trade Order: ${token.symbol} 🔐`,
@@ -334,7 +297,7 @@ Asset:      ${token.name} (${token.symbol})
 Source:     ${token.source}
 Allocation: $${amountUsd!.toFixed(2)} USD -> ~${tokenQty!.toFixed(4)} tokens
 Execution:  $${pricePerToken.toFixed(2)} per token
-Est. Fee:   ${quote.feePct}% ($${quote.feeUsd})${transferFeeNote}
+Est. Fee:   ${quote.feePct}% ($${quote.feeUsd})
 Est. Slip:  ~${quote.slippagePct}%
 Network:    Solana Devnet
 
@@ -396,13 +359,13 @@ async function handleSellIntent(
     db.setSnapshot(tokens)
   }
   const token = tokens.find(t => t.symbol === targetSymbol) || {
-    source: targetSymbol.startsWith('T-') ? 'Tessera' : 'PreStocks',
+    source: 'PreStocks' as const,
     name: targetSymbol,
     symbol: targetSymbol,
     tokenPrice: pos.avgPrice,
     sector: 'Tech',
     legalStructure: 'pre-IPO',
-    transferFeePct: targetSymbol.startsWith('T-') ? 0.2 : 0,
+    transferFeePct: 0,
     url: 'https://prestocks.com',
   }
 
@@ -430,8 +393,6 @@ async function handleSellIntent(
   }
 
   const proceeds = sellQty * currentPrice
-  const transferFee = token.source === 'Tessera' ? proceeds * 0.002 : 0
-  const netProceeds = proceeds - transferFee
 
   const intent = db.createIntent(
     from,
@@ -448,14 +409,16 @@ async function handleSellIntent(
     subject: `Confirm Trade Order: Sell ${targetSymbol} 🔐`,
     text: `Sell Order Summary:
 
-Action:       SELL
-Asset:        ${targetSymbol}
-Quantity:     ${sellQty.toFixed(4)} of ${pos.qty.toFixed(4)} tokens (${((sellQty / pos.qty) * 100).toFixed(0)}%)
-Price:        $${currentPrice.toFixed(2)} per token
-Gross Return: $${proceeds.toFixed(2)} USDC${transferFee > 0 ? `\nProtocol Fee: -$${transferFee.toFixed(4)} (Tessera 0.2% Token-2022)` : ''}
-Net Return:   $${netProceeds.toFixed(2)} USDC
+Action:     SELL
+Asset:      ${targetSymbol}
+Quantity:   ${sellQty.toFixed(4)} tokens
+Price:      $${currentPrice.toFixed(2)} per token
+Gross Return: $${proceeds.toFixed(2)} USDC
+Network:    Solana Devnet
 
-Reply CONFIRM to execute liquidation.
+⏱ This locked quote expires in 15 minutes.
+
+Reply CONFIRM to execute on-chain.
 Reply PASS to cancel.
 
 Intent ID: ${intent.id}
@@ -465,37 +428,52 @@ Intent ID: ${intent.id}
 }
 
 async function handleConfirm(from: string, threadId?: string) {
-  let intent = db.getLatestPendingIntent(from)
-  if (!intent) {
-    intent = await db.fetchLatestPendingIntentFromRedis(from)
-  }
-  if (!intent) {
+  const pending = db.getLatestPendingIntent(from)
+  if (!pending) {
+    const fromRedis = await db.fetchLatestPendingIntentFromRedis(from)
+    if (fromRedis && fromRedis.status === 'PENDING') {
+      db.pendingIntents.set(fromRedis.id, fromRedis)
+      return handleConfirm(from, threadId)
+    }
+
     await sendEmail('agent', {
       to: from,
-      subject: 'No Active Order Found',
-      text: 'No pending trade order was found (quotes expire after 15 minutes). Send a new BUY or SELL request to begin.\n\n— Preflight',
+      subject: 'No Pending Order',
+      text: 'You do not have any pending quotes awaiting confirmation. Reply BUY <amount> to any deal alert to request a quote.\n\n— Preflight',
       threadId,
     })
     return
   }
 
-  const swapResult = await executeDevnetTrade(
-    intent.token,
-    intent.amountUsd,
-    from,
-  )
-  db.confirmIntent(intent.id, swapResult.txHash)
-
-  if (intent.type === 'BUY') {
+  if (Date.now() > pending.expiresAt) {
+    db.cancelIntent(pending.id)
     await sendEmail('agent', {
       to: from,
-      subject: `Trade Executed: ${intent.token.symbol} on Solana Devnet`,
-      text: `Your purchase has settled on Solana.
+      subject: 'Quote Expired',
+      text: 'This quote has expired. Reply BUY <amount> to request a new execution quote.\n\n— Preflight',
+      threadId,
+    })
+    return
+  }
 
-Token:       ${intent.token.name} (${intent.token.symbol})
-Amount Paid: $${intent.amountUsd.toFixed(2)} USDC
-Received:    ${intent.tokenQty.toFixed(4)} tokens
-Unit Cost:   $${intent.priceAtIntent.toFixed(2)}
+  try {
+    const swapResult = await executeDevnetTrade(
+      pending.token,
+      pending.amountUsd,
+      from,
+    )
+    db.confirmIntent(pending.id, swapResult.txHash)
+
+    if (pending.type === 'BUY') {
+      await sendEmail('agent', {
+        to: from,
+        subject: `Trade Executed: ${pending.token.symbol} on Solana Devnet`,
+        text: `Your purchase has settled on Solana.
+
+Token:       ${pending.token.name} (${pending.token.symbol})
+Amount Paid: $${pending.amountUsd.toFixed(2)} USDC
+Received:    ${pending.tokenQty.toFixed(4)} tokens
+Unit Cost:   $${pending.priceAtIntent.toFixed(2)}
 Network:     Solana Devnet
 Tx Hash:     ${swapResult.txHash}
 Explorer:    https://explorer.solana.com/tx/${swapResult.txHash}?cluster=devnet
@@ -503,48 +481,46 @@ Explorer:    https://explorer.solana.com/tx/${swapResult.txHash}?cluster=devnet
 Your portfolio is updated. Reply PORTFOLIO anytime to review positions.
 
 — Preflight`,
-      threadId,
-    })
-  } else {
-    await sendEmail('agent', {
-      to: from,
-      subject: `Liquidation Executed: Sold ${intent.token.symbol}`,
-      text: `Your sell order has settled on Solana Devnet!
+        threadId,
+      })
+    } else {
+      await sendEmail('agent', {
+        to: from,
+        subject: `Trade Executed: Sold ${pending.token.symbol} on Solana Devnet`,
+        text: `Your sale has settled on Solana.
 
-Asset:       ${intent.token.symbol}
-Sold:        ${intent.tokenQty.toFixed(4)} tokens
-Proceeds:    $${intent.amountUsd.toFixed(2)} USDC
+Token:       ${pending.token.name} (${pending.token.symbol})
+Sold Qty:    ${pending.tokenQty.toFixed(4)} tokens
+Proceeds:    $${pending.amountUsd.toFixed(2)} USDC
+Network:     Solana Devnet
 Tx Hash:     ${swapResult.txHash}
 Explorer:    https://explorer.solana.com/tx/${swapResult.txHash}?cluster=devnet
 
-Reply PORTFOLIO to view remaining holdings.
+Your portfolio is updated. Reply PORTFOLIO anytime to review positions.
 
 — Preflight`,
+        threadId,
+      })
+    }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    await sendEmail('agent', {
+      to: from,
+      subject: 'Trade Execution Failed',
+      text: `We could not settle your trade on-chain:\n\n${msg}\n\nPlease verify your devnet balance or try again shortly.\n\n— Preflight`,
       threadId,
     })
   }
 }
 
 async function handlePortfolioRequest(from: string, threadId?: string) {
-  const portfolio = db.getPortfolio(from)
-  const holdings = Object.keys(portfolio)
-
-  if (holdings.length === 0) {
-    await sendEmail('agent', {
-      to: from,
-      subject: 'Preflight Portfolio Empty',
-      text: `You have no open pre-IPO positions.\n\nWhen a deal memo arrives, reply BUY <amount> to open your first allocation.\n\n— Preflight`,
-      threadId,
-    })
-    return
-  }
-
   let tokens = db.getSnapshot()
-  if (!tokens.length) {
+  if (tokens.length === 0) {
     tokens = await fetchAllTokens()
     db.setSnapshot(tokens)
   }
 
+  const portfolio = db.getPortfolio(from)
   const digest = await generatePortfolioDigest(portfolio, tokens)
 
   await sendEmail('agent', {
@@ -563,25 +539,16 @@ async function handleMarketList(from: string, threadId?: string) {
   }
 
   const prestocks = tokens.filter(t => t.source === 'PreStocks')
-  const tessera = tokens.filter(t => t.source === 'Tessera')
 
   const prestocksLines = prestocks.map(
     t =>
       `• ${t.name} (${t.symbol}): $${t.tokenPrice.toFixed(2)} | Implied Val: $${t.markValuation ? (t.markValuation / 1e9).toFixed(1) + 'B' : 'N/A'} | NAV Prem: ${t.premium || '0'}%`,
   )
 
-  const tesseraLines = tessera.map(
-    t =>
-      `• ${t.name} (${t.symbol}): $${t.tokenPrice.toFixed(2)} | Implied Val: $${t.markValuation ? (t.markValuation / 1e9).toFixed(1) + 'B' : 'N/A'} | 0.20% Fee | Chainlink PoR`,
-  )
-
   const text = `Preflight Live Market Catalog
 
 PreStocks (SPV-backed 1:1 exposure on Solana):
 ${prestocksLines.join('\n')}
-
-Tessera (Institutional Token-2022 + Proof of Reserve):
-${tesseraLines.join('\n')}
 
 To purchase any asset, reply:
 "BUY $100 <SYMBOL>" (e.g. "BUY $100 ANTHROPIC" or "BUY $250 SPACEX")
@@ -594,65 +561,6 @@ Reply PORTFOLIO anytime to review holdings.
     to: from,
     subject: 'Available Pre-IPO Stocks & Tokens',
     text,
-    threadId,
-  })
-}
-
-async function handleRedeemInfo(from: string, body: string, threadId?: string) {
-  const symbols = ['T-OpenAI', 'T-Kalshi', 'T-SpaceX']
-  const mentioned = symbols.find(s =>
-    body.toUpperCase().includes(s.toUpperCase().replace('T-', '')),
-  )
-
-  await sendEmail('agent', {
-    to: from,
-    subject: 'Tessera Redemption Architecture',
-    text: `Tessera T-Token Redemption Lifecycle:
-
-1. TRIGGER:
-   Occurs only upon an official IPO or Change of Control event (>50% voting).
-
-2. PROCEEDS & LOCK-UP:
-   Following post-IPO lock-up expiration (typically 90-180 days), Tessera distributes exit proceeds in stablecoins (USDC).
-
-3. REDEMPTION WINDOW (CRITICAL):
-   Tessera announces a formal Redemption Start Date with a fixed window (typically 30 days).
-   FORFEITURE WARNING: Missing the deadline results in permanent loss of proceeds.
-
-4. SECONDARY LIQUIDITY:
-   You do not need to wait for an IPO. T-Tokens are continuously tradeable on Jupiter and Meteora DEXs with a 0.20% Token-2022 transfer fee.
-
-${mentioned ? `Active feed for ${mentioned}: ${TESSERA.MINTS[mentioned]?.porFeed ? `https://data.chain.link/streams/${TESSERA.MINTS[mentioned].porFeed}` : 'tessera.pe'}` : ''}
-
-— Preflight Dealflow`,
-    threadId,
-  })
-}
-
-async function handleAuctionInfo(
-  from: string,
-  body: string,
-  threadId?: string,
-) {
-  const symbols = ['T-OpenAI', 'T-Kalshi', 'T-SpaceX']
-  const mentioned = symbols.find(s =>
-    body.toUpperCase().includes(s.toUpperCase().replace('T-', '')),
-  )
-  const auction = mentioned ? await fetchTesseraAuction(mentioned) : null
-
-  await sendEmail('agent', {
-    to: from,
-    subject: 'Meteora Alpha Vault Pro-Rata Auction Mechanics',
-    text: `Tessera Primary Issuance Mechanics:
-
-${auction?.phases?.map((p, i) => `Phase ${i + 1}: ${p.name}\n  ${p.desc}`).join('\n\n') || `Phase 1: Deposit Period (USDC deposit)\nPhase 2: Uniform Price Acquisition\nPhase 3: Vesting / Claiming`}
-
-Key Advantages:
-• Anti-Sniper: Bot speed confers zero advantage.
-• Uniform Pricing: All depositors enter at the exact same valuation.
-• Pro-Rata Allocation: Oversubscribed rounds provide proportional refunds.
-
-— Preflight Dealflow`,
     threadId,
   })
 }
@@ -689,63 +597,6 @@ export async function sendDealAlert(
         price: token.tokenPrice,
       },
     )
-  }
-}
-
-export async function sendRedemptionAlert(
-  symbol: string,
-  eventType: 'IPO' | 'CHANGE_OF_CONTROL',
-  redemptionStartDate: string,
-  windowDays = 30,
-) {
-  const alert = buildRedemptionAlert(
-    symbol,
-    eventType,
-    redemptionStartDate,
-    windowDays,
-  )
-  const subscribers = db.getAllSubscribers()
-
-  for (const sub of subscribers) {
-    const portfolio = db.getPortfolio(sub.email)
-    if (!portfolio[symbol] && !portfolio[symbol.replace('T-', '')]) continue
-
-    await sendEmail('agent', {
-      to: sub.email,
-      subject: `CRITICAL: ${symbol} ${eventType} — Redeem by ${alert.deadline}`,
-      text: `ACTION REQUIRED: ${symbol} Liquidity Event
-
-${alert.warning}
-
-Event:             ${eventType}
-Window Closes:     ${alert.deadline} (${alert.daysLeft} days remaining)
-Payout Asset:      ${alert.stablecoin}
-
-How to claim:
-${alert.howToRedeem}
-
-— Preflight`,
-    })
-
-    db.logActivity(
-      'REDEMPTION_ALERT',
-      `Redemption notice sent for ${symbol} to ${sub.email}`,
-      {
-        symbol,
-        deadline: alert.deadline,
-      },
-    )
-  }
-}
-
-export async function sendAuctionAlert(symbol: string, auctionData: unknown) {
-  const subscribers = db.getAllSubscribers()
-  for (const sub of subscribers) {
-    await sendEmail('agent', {
-      to: sub.email,
-      subject: `Meteora Alpha Vault LIVE: ${symbol} (Pro-Rata Anti-Sniper)`,
-      text: `A new primary allocation for ${symbol} is open on Tessera.\n\nAll depositors receive uniform pricing. Deposit USDC on tessera.pe/auction.\n\n— Preflight`,
-    })
   }
 }
 
