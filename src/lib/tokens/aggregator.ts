@@ -1,28 +1,18 @@
 import { fetchPreStocks } from './prestocks'
-import { fetchTesseraTokens } from './tessera'
 import { db } from '@/lib/db/store'
 import type { Token, SubscriberProfile } from '@/types'
 
 export async function fetchAllTokens(): Promise<Token[]> {
-  const [prestocksRes, tesseraRes] = await Promise.allSettled([
-    fetchPreStocks(),
-    fetchTesseraTokens(),
-  ])
+  try {
+    const prestocks = await fetchPreStocks()
+    if (prestocks.length > 0) {
+      return prestocks
+    }
+  } catch (error) {
+    console.error('Failed to fetch PreStocks:', error)
+  }
 
-  const cached = db.getSnapshot()
-  const cachedPs = cached.filter(t => t.source === 'PreStocks')
-  const cachedTs = cached.filter(t => t.source === 'Tessera')
-
-  const ps =
-    prestocksRes.status === 'fulfilled' && prestocksRes.value.length > 0
-      ? prestocksRes.value
-      : cachedPs
-  const ts =
-    tesseraRes.status === 'fulfilled' && tesseraRes.value.length > 0
-      ? tesseraRes.value
-      : cachedTs
-
-  return [...ps, ...ts]
+  return db.getSnapshot().filter(t => t.source === 'PreStocks')
 }
 
 export function detectMoves(
