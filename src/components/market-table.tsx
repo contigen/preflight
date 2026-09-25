@@ -65,7 +65,7 @@ export function MarketTable({
                 onClick={() => setSectorFilter(sec)}
                 className={`rounded-full px-3 py-1 transition ${
                   sectorFilter === sec
-                    ? 'bg-white text-black shadow-xs font-bold'
+                    ? 'bg-white text-black shadow-xs '
                     : 'text-zinc-500'
                 }`}
               >
@@ -83,7 +83,7 @@ export function MarketTable({
             className='flex items-center justify-between rounded-2xl bg-white border border-zinc-200/80 p-4 transition hover:border-zinc-300 shadow-xs'
           >
             <div className='flex items-center gap-3'>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 font-pixel text-xs font-bold text-zinc-700'>
+              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 font-pixel text-xs  text-zinc-700'>
                 {token.symbol.slice(0, 3)}
               </div>
               <div>
@@ -91,7 +91,7 @@ export function MarketTable({
                   <span className='font-hand text-2xl text-zinc-900'>
                     {token.name}
                   </span>
-                  <span className='font-pixel text-xs text-zinc-400 font-bold'>
+                  <span className='font-pixel text-xs text-zinc-400 '>
                     {token.symbol}
                   </span>
                   <span className='rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-pixel text-blue-700 border border-blue-200'>
@@ -110,7 +110,7 @@ export function MarketTable({
 
             <div className='flex items-center gap-4'>
               <div className='text-right'>
-                <div className='font-pixel text-lg sm:text-xl font-bold text-blue-600'>
+                <div className='font-pixel text-lg sm:text-xl  text-blue-600'>
                   ${token.tokenPrice.toFixed(2)}
                 </div>
                 <div className='inline-flex items-center gap-0.5 text-[10px] font-pixel text-emerald-600'>

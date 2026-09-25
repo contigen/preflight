@@ -188,10 +188,10 @@ export function DealCard({
       <div className='relative w-full rounded-3xl bg-white border border-zinc-200/90 shadow-sm p-6 sm:p-7'>
         <div className='w-full mb-6'>
           <div className='flex items-center justify-between mb-2.5 px-0.5'>
-            <span className='font-pixel text-[11px] uppercase tracking-wider text-zinc-400 font-bold'>
+            <span className='font-pixel text-[11px] uppercase tracking-wider text-zinc-400 '>
               PreStocks Assets
             </span>
-            <span className='font-pixel text-[11px] text-emerald-600 font-bold'>
+            <span className='font-pixel text-[11px] text-emerald-600 '>
               0% Protocol Fee
             </span>
           </div>
@@ -208,7 +208,7 @@ export function DealCard({
                   }}
                   className={`py-2 px-1 rounded-xl text-xs font-pixel transition text-center truncate ${
                     isSelected
-                      ? 'bg-black text-white font-bold shadow-xs'
+                      ? 'bg-black text-white  shadow-xs'
                       : 'text-zinc-600 hover:text-black hover:bg-white/60'
                   }`}
                   title={`${t.name} - $${t.tokenPrice.toFixed(2)}`}
@@ -227,7 +227,7 @@ export function DealCard({
               onClick={() => setAction('BUY')}
               className={`rounded-full px-4 py-1.5 transition ${
                 action === 'BUY'
-                  ? 'bg-black text-white font-bold shadow-xs'
+                  ? 'bg-black text-white  shadow-xs'
                   : 'text-zinc-600 hover:text-black'
               }`}
             >
@@ -238,7 +238,7 @@ export function DealCard({
               onClick={() => setAction('SELL')}
               className={`rounded-full px-4 py-1.5 transition ${
                 action === 'SELL'
-                  ? 'bg-rose-600 text-white font-bold shadow-xs'
+                  ? 'bg-rose-600 text-white  shadow-xs'
                   : 'text-zinc-600 hover:text-black'
               }`}
             >
@@ -250,14 +250,14 @@ export function DealCard({
             <div className='font-pixel text-[10px] text-zinc-400 uppercase'>
               Market Price
             </div>
-            <div className='font-pixel text-sm font-bold text-zinc-900'>
+            <div className='font-pixel text-sm  text-zinc-900'>
               ${selectedToken?.tokenPrice.toFixed(2)}
             </div>
           </div>
         </div>
 
         <div className='flex flex-col items-center my-4'>
-          <div className='font-pixel text-5xl sm:text-6xl font-bold tracking-tight text-blue-600'>
+          <div className='font-pixel text-5xl sm:text-6xl  tracking-tight text-blue-600'>
             ${amountUsd}
           </div>
           <div className='mt-2 font-hand text-2xl sm:text-3xl text-zinc-900'>
@@ -277,7 +277,7 @@ export function DealCard({
               onClick={() => setAmountUsd(amt)}
               className={`rounded-full px-3.5 py-1 text-xs font-pixel transition ${
                 amountUsd === amt
-                  ? 'bg-blue-600 text-white font-bold shadow-xs'
+                  ? 'bg-blue-600 text-white  shadow-xs'
                   : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
               }`}
             >
@@ -289,29 +289,27 @@ export function DealCard({
         <div className='w-full rounded-2xl bg-zinc-50 border border-zinc-200/70 p-3.5 mb-5 space-y-2 font-pixel text-xs'>
           <div className='flex justify-between items-center text-zinc-600'>
             <span>Asset Structure</span>
-            <span className='font-bold text-zinc-800'>
-              1:1 SPV Beneficial Ownership
-            </span>
+            <span className=' text-zinc-800'>1:1 SPV Beneficial Ownership</span>
           </div>
           <div className='flex justify-between items-center text-zinc-600'>
             <span>Secondary Mark Premium</span>
-            <span className='font-bold text-emerald-600'>
+            <span className=' text-emerald-600'>
               {selectedToken?.premium || '0'}%
             </span>
           </div>
           <div className='flex justify-between items-center text-zinc-600'>
             <span>Protocol Fee</span>
-            <span className='font-bold text-zinc-800'>0.00%</span>
+            <span className=' text-zinc-800'>0.00%</span>
           </div>
           <div className='flex justify-between items-center text-zinc-600'>
             <span>Settlement Network</span>
-            <span className='font-bold text-zinc-800'>Solana Devnet</span>
+            <span className=' text-zinc-800'>Solana Devnet</span>
           </div>
           {userWallet && (
             <div className='flex justify-between items-center text-zinc-600 pt-1.5 border-t border-zinc-200/60'>
               <span>Wallet Gas</span>
               <span
-                className={`font-bold ${
+                className={` ${
                   userWallet.isFunded ? 'text-emerald-700' : 'text-amber-700'
                 }`}
               >
@@ -378,7 +376,7 @@ export function DealCard({
                 <span className='font-hand text-lg text-zinc-900'>
                   Valuation Memo ({selectedToken?.symbol})
                 </span>
-                <span className='text-[10px] font-pixel text-blue-600 font-bold'>
+                <span className='text-[10px] font-pixel text-blue-600 '>
                   Gemini 3.6 Flash
                 </span>
               </div>

@@ -304,7 +304,7 @@ export function PreflightView({
               onClick={() => setActiveTab('DEAL')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'DEAL'
-                  ? 'bg-white text-black shadow-xs font-bold'
+                  ? 'bg-white text-black shadow-xs '
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -317,7 +317,7 @@ export function PreflightView({
               onClick={() => setActiveTab('MARKETS')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'MARKETS'
-                  ? 'bg-white text-black shadow-xs font-bold'
+                  ? 'bg-white text-black shadow-xs '
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -330,7 +330,7 @@ export function PreflightView({
               onClick={() => setActiveTab('ACTIVITY')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'ACTIVITY'
-                  ? 'bg-white text-black shadow-xs font-bold'
+                  ? 'bg-white text-black shadow-xs '
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -343,7 +343,7 @@ export function PreflightView({
               onClick={() => setActiveTab('GUIDE')}
               className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 transition ${
                 activeTab === 'GUIDE'
-                  ? 'bg-white text-black shadow-xs font-bold'
+                  ? 'bg-white text-black shadow-xs '
                   : 'text-zinc-500 hover:text-black'
               }`}
             >
@@ -376,7 +376,7 @@ export function PreflightView({
                     {userEmail}
                   </span>
                   <span
-                    className={`px-1.5 py-0.2 rounded-full text-[9px] font-bold ${
+                    className={`px-1.5 py-0.2 rounded-full text-[9px]  ${
                       userWallet?.isFunded
                         ? 'bg-emerald-100 text-emerald-800'
                         : 'bg-amber-100 text-amber-800'
@@ -425,35 +425,35 @@ export function PreflightView({
           <button
             type='button'
             onClick={() => setActiveTab('DEAL')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'DEAL' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'DEAL' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             Deal Flow
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('MARKETS')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'MARKETS' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'MARKETS' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             Markets
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('ACTIVITY')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'ACTIVITY' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'ACTIVITY' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             Holdings
           </button>
           <button
             type='button'
             onClick={() => setActiveTab('GUIDE')}
-            className={`rounded-full px-3 py-1 transition ${activeTab === 'GUIDE' ? 'bg-black text-white font-bold' : 'text-zinc-600'}`}
+            className={`rounded-full px-3 py-1 transition ${activeTab === 'GUIDE' ? 'bg-black text-white ' : 'text-zinc-600'}`}
           >
             How It Works
           </button>
           <button
             type='button'
             onClick={() => setIsOnboardingOpen(true)}
-            className='rounded-full px-3 py-1 transition text-blue-600 font-bold'
+            className='rounded-full px-3 py-1 transition text-blue-600 '
           >
             Directive
           </button>

@@ -77,7 +77,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
   return (
     <div className='w-full max-w-5xl px-4 py-8 mx-auto flex flex-col gap-10'>
       <div className='text-center max-w-2xl mx-auto flex flex-col items-center gap-2'>
-        <span className='rounded-full bg-blue-50 px-3 py-1 font-pixel text-xs text-blue-700 border border-blue-200 font-bold'>
+        <span className='rounded-full bg-blue-50 px-3 py-1 font-pixel text-xs text-blue-700 border border-blue-200 '>
           Product Architecture &amp; User Guide
         </span>
         <h1 className='font-hand text-5xl sm:text-6xl tracking-wide text-zinc-900'>
@@ -99,7 +99,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
             >
               <div>
                 <div className='flex items-center justify-between mb-3'>
-                  <span className='font-pixel text-xl font-bold text-blue-600'>
+                  <span className='font-pixel text-xl  text-blue-600'>
                     {step.num}
                   </span>
                   <span className='rounded-full bg-zinc-100 px-2 py-0.5 font-pixel text-[10px] text-zinc-600 border border-zinc-200'>
@@ -131,7 +131,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
                   PreStocks SPV Architecture
                 </h3>
               </div>
-              <span className='font-pixel text-[11px] text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 font-bold'>
+              <span className='font-pixel text-[11px] text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 '>
                 0% Protocol Fee
               </span>
             </div>
@@ -148,7 +148,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
                   className='p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/70 hover:border-zinc-300 transition'
                 >
                   <div className='flex items-center justify-between'>
-                    <span className='font-bold text-zinc-900 text-xs'>
+                    <span className=' text-zinc-900 text-xs'>
                       {asset.symbol}
                     </span>
                     <span className='text-[9px] text-zinc-400'>SPL</span>
@@ -199,7 +199,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
             <div className='space-y-2.5 font-pixel text-xs'>
               <div className='p-3 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex items-center justify-between'>
                 <div>
-                  <span className='text-emerald-400 font-bold'>BUY $250</span>
+                  <span className='text-emerald-400 '>BUY $250</span>
                   <span className='text-zinc-400 ml-2'>
                     or &quot;Invest $500 in Anthropic&quot;
                   </span>
@@ -211,7 +211,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
 
               <div className='p-3 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex items-center justify-between'>
                 <div>
-                  <span className='text-blue-400 font-bold'>CONFIRM</span>
+                  <span className='text-blue-400 '>CONFIRM</span>
                   <span className='text-zinc-400 ml-2'>
                     or &quot;Yes, proceed&quot;
                   </span>
@@ -223,7 +223,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
 
               <div className='p-3 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex items-center justify-between'>
                 <div>
-                  <span className='text-red-400 font-bold'>SELL 50%</span>
+                  <span className='text-red-400 '>SELL 50%</span>
                   <span className='text-zinc-400 ml-2'>
                     or &quot;Exit SpaceX&quot;
                   </span>
@@ -235,7 +235,7 @@ export function HowItWorks({ onStartTrading }: HowItWorksProps) {
 
               <div className='p-3 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex items-center justify-between'>
                 <div>
-                  <span className='text-purple-400 font-bold'>PORTFOLIO</span>
+                  <span className='text-purple-400 '>PORTFOLIO</span>
                   <span className='text-zinc-400 ml-2'>
                     or &quot;What do I hold?&quot;
                   </span>

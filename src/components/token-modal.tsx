@@ -42,21 +42,21 @@ export function TokenModal({ token, onClose, onTrade }: TokenModalProps) {
           <div className='rounded-2xl bg-zinc-50 p-4 space-y-2.5 font-pixel text-xs border border-zinc-200/60'>
             <div className='flex justify-between'>
               <span className='text-zinc-500'>Token Price:</span>
-              <span className='text-blue-600 font-bold'>
+              <span className='text-blue-600 '>
                 ${token.tokenPrice.toFixed(2)}
               </span>
             </div>
             {token.markPrice && (
               <div className='flex justify-between'>
                 <span className='text-zinc-500'>Secondary Mark Price:</span>
-                <span className='text-zinc-800 font-bold'>
+                <span className='text-zinc-800 '>
                   ${token.markPrice.toFixed(2)}
                 </span>
               </div>
             )}
             <div className='flex justify-between'>
               <span className='text-zinc-500'>Implied Valuation:</span>
-              <span className='text-zinc-800 font-bold'>
+              <span className='text-zinc-800 '>
                 {token.markValuation
                   ? `$${(token.markValuation / 1e9).toFixed(1)}B`
                   : 'N/A'}
@@ -65,16 +65,12 @@ export function TokenModal({ token, onClose, onTrade }: TokenModalProps) {
             {token.premium && (
               <div className='flex justify-between'>
                 <span className='text-zinc-500'>NAV Premium / Discount:</span>
-                <span className='text-emerald-600 font-bold'>
-                  {token.premium}%
-                </span>
+                <span className='text-emerald-600 '>{token.premium}%</span>
               </div>
             )}
             <div className='flex justify-between'>
               <span className='text-zinc-500'>Transfer Fee:</span>
-              <span className='text-zinc-800 font-bold'>
-                0.00% (Standard SPL token)
-              </span>
+              <span className='text-zinc-800 '>0.00% (Standard SPL token)</span>
             </div>
             {token.contractAddress && (
               <div className='flex justify-between items-center'>
