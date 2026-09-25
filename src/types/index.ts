@@ -1,4 +1,4 @@
-export type TokenSource = 'PreStocks' | 'Tessera'
+export type TokenSource = 'PreStocks'
 
 export type Sector =
   | 'AI'
@@ -34,82 +34,8 @@ export type Token = {
   solscan?: string
   changeType?: 'NEW_LISTING' | 'PRICE_MOVE'
   changePct?: string | null
-  porFeed?: string
   decimals?: number
   feeBps?: number
-}
-
-export type TesseraHolders = {
-  address: string
-  amount: number
-  uiAmount: number | null
-}
-
-export type TesseraOnChain = {
-  symbol: string
-  mint: string
-  decimals: number
-  totalSupply: number | null
-  rawSupply: string
-  transferFeeBps: number
-  transferFeePct: number
-  standard: 'Token-2022'
-  topHolders: TesseraHolders[]
-  solscan?: string
-}
-
-export type TesseraPoR = {
-  symbol: string
-  feedUrl: string
-  feedId: string
-  verifiedBy: string
-  auditedBy: string
-  custodian: string
-  reserve: string
-  onChain: boolean
-  note: string
-}
-
-export type AuctionPhase = {
-  name: string
-  desc: string
-}
-
-export type TesseraAuction = {
-  symbol: string
-  mechanism: string
-  phases: AuctionPhase[]
-  antiSniper: boolean
-  uniformPrice: boolean
-  status: 'LIVE' | 'UPCOMING' | 'CLOSED' | 'MONITORING'
-  note: string
-}
-
-export type TesseraEnrichedToken = Token & {
-  onChain: TesseraOnChain | null
-  por: TesseraPoR | null
-  auction: TesseraAuction | null
-  marketCapStr: string
-  priceStr: string
-  feeOnTransfer: string
-  tradeableOn: string[]
-  custodian: string
-  auditedBy: string
-  geography: string
-}
-
-export type RedemptionAlertData = {
-  symbol: string
-  eventType: 'IPO' | 'CHANGE_OF_CONTROL'
-  redemptionStartDate: string
-  windowDays: number
-  deadline: string
-  daysLeft: number
-  stablecoin: string
-  transferFeeOnSell: string
-  warning: string
-  howToRedeem: string
-  taxNote: string
 }
 
 export type SubscriberProfile = {
@@ -130,8 +56,6 @@ export type IntentType =
   | 'PORTFOLIO'
   | 'MARKET'
   | 'UNSUBSCRIBE'
-  | 'REDEEM'
-  | 'AUCTION'
   | 'UNCLEAR'
 
 export type ParsedReplyIntent = {
